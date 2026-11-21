@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Answer-Key Leakage: robot agents score higher when they know which task they are on</title>
-  <meta name="description" content="A frontier model recalled 12 of 36 hidden benchmark details with search off and 35 of 36 with it on. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.">
+  <meta name="description" content="A frontier model recalled 12 of 36 hidden benchmark details with no network access, and 35 of 36 with one. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Answer-Key Leakage: robot agents score higher when they know which task they are on">
-  <meta property="og:description" content="A frontier model recalled 12 of 36 hidden benchmark details with search off and 35 of 36 with it on. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.">
+  <meta property="og:description" content="A frontier model recalled 12 of 36 hidden benchmark details with no network access, and 35 of 36 with one. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.">
   <meta property="og:url" content="https://disproofailab.github.io/robot-reward-audit/">
   <meta name="citation_title" content="Answer-Key Leakage: robot agents score higher when they know which task they are on">
   <meta name="citation_author" content="Disproof AI Lab">
@@ -39,7 +39,7 @@
   <script type="text/json">
   {
     "title": "Answer-Key Leakage: robot agents score higher when they know which task they are on",
-    "description": "A frontier model recalled 12 of 36 hidden benchmark details with search off and 35 of 36 with it on. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.",
+    "description": "A frontier model recalled 12 of 36 hidden benchmark details with no network access, and 35 of 36 with one. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.",
     "authors": [
       {"author": "Disproof AI Lab", "authorURL": "https://github.com/DisproofAILab", "affiliations": [{"name": "Disproof AI Lab"}]}
     ]
@@ -49,8 +49,8 @@
 
 <d-title>
   <h1>Robot agents score higher when they know which task they are on</h1>
-  <p class="title-sub">A frontier model recalled 12 of 36 hidden benchmark details with search off,
-  and 35 of 36 with it on. Handing the same model the task ID raised its success rate in
+  <p class="title-sub">A frontier model recalled 12 of 36 hidden benchmark details with no network
+  access, and 35 of 36 with one. Handing the same model the task ID raised its success rate in
   LIBERO-Plus by 20.8 points, over 24 pairs that started from the same simulator state.</p>
 </d-title>
 
@@ -73,8 +73,8 @@
     <b>TL;DR</b>
     <p>We graded a robot agent on a benchmark whose reward it is not supposed to read. It already knew
     a fair amount of that reward, and handing it the task&rsquo;s name and number made it better at the task.</p>
-    <p>With search off, <code>gpt-6.1-sol</code> reproduced <b>12 of 36</b> withheld numbers from six
-    benchmark codebases exactly, including an internal object name it had never been shown. With search on
+    <p>With no network access, <code>gpt-6.1-sol</code> reproduced <b>12 of 36</b> withheld numbers from six
+    benchmark codebases exactly, including an internal object name it had never been shown. With network access
     it got <b>35 of 36</b>.</p>
     <p>Then we ran 24 matched episodes in LIBERO-Plus, same scene and same instruction and same cameras.
     With the task ID in the tool reply, <b>13 of 24</b> succeeded; without it, <b>8</b>. Five pairs flipped.
@@ -96,7 +96,7 @@
             <div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div>
           </div>
         </div>
-        <div class="tz-astra">One clean folder, no network, no search.</div>
+        <div class="tz-astra">One clean folder, no shell, no network.</div>
         <div class="tz-out"><span class="tz-big">12 / 36</span>
           <span class="tz-note">details recalled exactly, from memory</span></div>
       </div>
@@ -164,7 +164,7 @@
   <p>We drew two cases from each of six benchmarks: RoboCasa365, LIBERO, LIBERO-PRO, LIBERO-Plus,
   RoboTwin 2.0 and robosuite. Three questions each, thirty-six in all.</p>
 
-  <p><b>With search off, the model answered 12 of the 36 exactly, in 5 of the 12 cases.</b> It got all
+  <p><b>With no network access, the model answered 12 of the 36 exactly, in 5 of the 12 cases.</b> It got all
   three in robosuite&rsquo;s Stack task, all three in robosuite&rsquo;s Door, and all three for starting
   the RoboCasa microwave. It got two for the LIBERO mug scene and one for the RoboCasa drawer, and
   nothing at all for the seven remaining cases.</p>
@@ -189,10 +189,10 @@
             readable, with no shell and no network</li>
           <li><b>The sheet:</b> benchmark, task name, original instruction, repository, commit, source
             file path, the three questions, and permission to answer &ldquo;unknown&rdquo;</li>
-          <li><b>Not available:</b> the repository, the answer key, search, and any previous session</li>
+          <li><b>Not available:</b> the repository, the answer key, search, the shell, and the network</li>
           <li><b>Scoring:</b> exact match by hand against the pinned source, one verdict per field;
             approximate values were counted separately</li>
-          <li><b>Search arm:</b> the same twelve sheets, verbatim, in fresh sessions with a live search
+          <li><b>Network arm:</b> the same twelve sheets, verbatim, in fresh sessions with a live search
             tool; all twelve used it</li>
         </ul>
       </div>
@@ -200,10 +200,10 @@
     <div id="qa-figure"></div>
     <figcaption><b>Each square is one of the 36 questions.</b> A filled square is an exact match.
     Click a row to see what was asked, what the answer key says, and what the model said. The second
-    tab is the same twelve cases asked again, with search on.</figcaption>
+    tab is the same twelve cases asked again, with network access.</figcaption>
   </figure>
 
-  <p><b>With search on, the score went to 35 of 36.</b> All twelve sessions reached for the tool, and
+  <p><b>With network access, the score went to 35 of 36.</b> All twelve sessions reached for the tool, and
   every case but one came back perfect. The single miss was LIBERO-PRO&rsquo;s object swap, where the
   task is to put a specified mug in the microwave: even with the source in front of it, the model named
   the wrong mug instance.</p>

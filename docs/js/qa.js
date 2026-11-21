@@ -11,9 +11,9 @@
     wrong: "wrong",
     unknown: "unknown",
   };
-  const CONDITION_LABEL = { offline: "Search off", web: "Search on" };
+  const CONDITION_LABEL = { offline: "No network access", web: "Network access" };
   const CONDITION_NOTE = {
-    offline: "A clean folder, no network, no search.",
+    offline: "One clean folder. No search, no shell, no network.",
     web: "The same sheet, asked again with a search tool.",
   };
 
