@@ -143,14 +143,6 @@ d-title h1 {
   }
 }
 
-d-title .title-kicker {
-  display: block;
-  margin: 0 0 6px;
-  font-size: 26px;
-  font-weight: 300;
-  color: var(--green);
-}
-
 d-title .title-sub {
   margin: 14px 0 0;
   font-size: 19px;
@@ -174,7 +166,7 @@ html body d-byline {
 .post-byline .byline-grid {
   grid-column: text;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   column-gap: 8px;
 }
 
