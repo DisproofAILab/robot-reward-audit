@@ -1,0 +1,59 @@
+[
+ {
+  "task": "libero_10/106",
+  "label": "Both moka pots on stove",
+  "instruction": "put both moka pots on the stove",
+  "provided": 4,
+  "hidden": 3,
+  "only_provided": [
+   1
+  ]
+ },
+ {
+  "task": "libero_goal/2365",
+  "label": "Bowl in top drawer",
+  "instruction": "open the top layer of the drawer and put the bowl inside",
+  "provided": 1,
+  "hidden": 0,
+  "only_provided": [
+   3
+  ]
+ },
+ {
+  "task": "libero_spatial/1753",
+  "label": "Specified bowl on plate",
+  "instruction": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+  "provided": 4,
+  "hidden": 4,
+  "only_provided": []
+ },
+ {
+  "task": "libero_goal/1976",
+  "label": "Plate to stove front",
+  "instruction": "push the plate to the front of the stove",
+  "provided": 1,
+  "hidden": 0,
+  "only_provided": [
+   2
+  ]
+ },
+ {
+  "task": "libero_10/2007",
+  "label": "Mug in, door closed",
+  "instruction": "put the yellow and white mug in the microwave and close it",
+  "provided": 0,
+  "hidden": 0,
+  "only_provided": []
+ },
+ {
+  "task": "libero_object/0",
+  "label": "Soup in basket",
+  "instruction": "pick the alphabet soup and place it in the basket",
+  "provided": 3,
+  "hidden": 1,
+  "only_provided": [
+   1,
+   3
+  ]
+ }
+]

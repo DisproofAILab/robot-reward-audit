@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Answer-Key Leakage: robot agents score higher when they know which task they are on</title>
+  <meta name="description" content="A frontier model recalled 12 of 36 hidden benchmark details with search off and 35 of 36 with it on. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Answer-Key Leakage: robot agents score higher when they know which task they are on">
+  <meta property="og:description" content="A frontier model recalled 12 of 36 hidden benchmark details with search off and 35 of 36 with it on. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.">
+  <meta property="og:url" content="https://disproofailab.github.io/robot-reward-audit/">
+  <meta name="citation_title" content="Answer-Key Leakage: robot agents score higher when they know which task they are on">
+  <meta name="citation_author" content="Disproof AI Lab">
+  <meta name="citation_publication_date" content="2026/11/21">
+  <meta name="citation_fulltext_html_url" content="https://disproofailab.github.io/robot-reward-audit/">
+  <meta property="article:published_time" content="2026-11-21T00:00:00+08:00">
+  <meta name="robots" content="max-image-preview:large">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%23118659%22/%3E%3Crect x=%228%22 y=%228%22 width=%226%22 height=%226%22 fill=%22white%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%226%22 height=%226%22 fill=%22white%22 opacity=%22.55%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/template.v2.js"></script>
+
+  <!-- The template appends its own stylesheet while it renders, which would otherwise come after
+       this page's. Move our link to the end of the head once it has run, so the page keeps its look. -->
+  <script>
+  function keepOurStyleLast() {
+    const own = document.querySelector('link[href="css/style.css"]');
+    if (own && document.head.lastElementChild !== own) document.head.appendChild(own);
+  }
+  document.addEventListener("DOMContentLoaded", keepOurStyleLast);
+  window.addEventListener("load", keepOurStyleLast);
+  </script>
+</head>
+
+<body>
+
+<d-front-matter>
+  <script type="text/json">
+  {
+    "title": "Answer-Key Leakage: robot agents score higher when they know which task they are on",
+    "description": "A frontier model recalled 12 of 36 hidden benchmark details with search off and 35 of 36 with it on. Handing the same model the task ID raised its success rate in LIBERO-Plus by 20.8 points across 24 matched pairs.",
+    "authors": [
+      {"author": "Disproof AI Lab", "authorURL": "https://github.com/DisproofAILab", "affiliations": [{"name": "Disproof AI Lab"}]}
+    ]
+  }
+  </script>
+</d-front-matter>
+
+<d-title>
+  <h1><span class="title-kicker">Answer-Key Leakage:</span>
+  robot agents score higher when they know which task they are on</h1>
+  <p class="title-sub">A frontier model recalled 12 of 36 hidden benchmark details with search off,
+  and 35 of 36 with it on. Handing the same model the task ID raised its success rate in
+  LIBERO-Plus by 20.8 points, over 24 pairs that started from the same simulator state.</p>
+</d-title>
+
+<div class="base-grid post-byline">
+  <div class="byline-grid">
+    <div>
+      <h3>Authors</h3>
+      <p>Disproof AI Lab</p>
+    </div>
+    <div>
+      <h3>Code and data</h3>
+      <p><a href="https://github.com/DisproofAILab/robot-reward-audit">robot-reward-audit</a></p>
+    </div>
+    <div>
+      <h3>Published</h3>
+      <p>November 21, 2026</p>
+    </div>
+  </div>
+</div>
+
+<d-article>
+
+  <div class="tldr">
+    <b>TL;DR</b>
+    <p>We graded a robot agent on a benchmark whose reward it is not supposed to read. It already knew
+    a fair amount of that reward, and handing it the task&rsquo;s name and number made it better at the task.</p>
+    <p>With search off, <code>gpt-6.1-sol</code> reproduced <b>12 of 36</b> withheld numbers from six
+    benchmark codebases exactly, including an internal object name it had never been shown. With search on
+    it got <b>35 of 36</b>.</p>
+    <p>Then we ran 24 matched episodes in LIBERO-Plus, same scene and same instruction and same cameras.
+    With the task ID in the tool reply, <b>13 of 24</b> succeeded; without it, <b>8</b>. Five pairs flipped.
+    The other nineteen did not move.</p>
+  </div>
+
+  <figure class="l-page">
+    <div class="teaser">
+      <div class="tz-panel">
+        <div class="tz-step">Recall</div>
+        <div class="tz-task">Does it remember what a benchmark&rsquo;s source code says?</div>
+        <div class="tz-vis">
+          <div class="tz-dots">
+            <div class="tz-dot on"></div><div class="tz-dot on"></div><div class="tz-dot on"></div><div class="tz-dot on"></div><div class="tz-dot on"></div><div class="tz-dot on"></div>
+            <div class="tz-dot on"></div><div class="tz-dot on"></div><div class="tz-dot on"></div><div class="tz-dot on"></div><div class="tz-dot on"></div><div class="tz-dot on"></div>
+            <div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div>
+            <div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div>
+            <div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div>
+            <div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div><div class="tz-dot"></div>
+          </div>
+        </div>
+        <div class="tz-astra">One clean folder, no network, no search.</div>
+        <div class="tz-out"><span class="tz-big">12 / 36</span>
+          <span class="tz-note">details recalled exactly, from memory</span></div>
+      </div>
+
+      <div class="tz-panel">
+        <div class="tz-step">Recognize</div>
+        <div class="tz-task">Which distractor mug is standing on the table?</div>
+        <div class="tz-vis">
+          <div class="tz-name">red_coffee_mug_1</div>
+        </div>
+        <div class="tz-astra">The sheet says only that a third mug exists.</div>
+        <div class="tz-out"><span class="tz-big is-word">exact match</span>
+          <span class="tz-note">the scene file&rsquo;s own name for the mug</span></div>
+      </div>
+
+      <div class="tz-panel">
+        <div class="tz-step">Score</div>
+        <div class="tz-task">Does knowing which task it is on make it pass?</div>
+        <div class="tz-vis">
+          <div class="tz-bars">
+            <div class="tz-col">
+              <span class="tz-v">33.3%</span>
+              <div class="tz-bar tz-bar-before" style="height: 26px"></div>
+              <div class="tz-bl">IDs hidden</div>
+            </div>
+            <div class="tz-col">
+              <span class="tz-v">54.2%</span>
+              <div class="tz-bar tz-bar-after" style="height: 43px"></div>
+              <div class="tz-bl">IDs provided</div>
+            </div>
+          </div>
+        </div>
+        <div class="tz-astra">24 pairs, same starting state, one session each.</div>
+        <div class="tz-out"><span class="tz-big">+20.8</span>
+          <span class="tz-note">percentage points of success rate</span></div>
+      </div>
+    </div>
+  </figure>
+
+  <h2>What counts as answer-key leakage</h2>
+
+  <p>A benchmark is supposed to score behaviour. Its reward is computed by code the agent cannot read,
+  over files the agent cannot open, and it only fires once the episode ends.</p>
+
+  <p>Two things break that arrangement. The model may already hold a copy of the grading code in its
+  weights, so the question &ldquo;how is this scored&rdquo; has an answer it can recall. Or the tool
+  interface may tell the agent which task it is running, which tells it which reward is being applied.
+  Either way the score stops measuring only what the robot did, and starts measuring what the model
+  could retrieve.</p>
+
+  <p>We tested both: first whether the model can state the answer, then whether stating it changes
+  what the arm does.</p>
+
+  <div class="exp-head">
+    <span class="exp-num">Experiment 1</span>
+    <h3>Can the model remember a benchmark&rsquo;s source code?</h3>
+  </div>
+
+  <p>We asked the model one question at a time, each in a fresh folder holding nothing but a task sheet.
+  Search, shell access and network reads were off. The source code and the answer key stayed outside its
+  workspace. The sheet named the benchmark, the task, the original instruction, the repository, the exact
+  commit and the file path, and asked for three details that code settles. It was allowed to answer
+  &ldquo;unknown&rdquo;.</p>
+
+  <p>We drew two cases from each of six benchmarks: RoboCasa365, LIBERO, LIBERO-PRO, LIBERO-Plus,
+  RoboTwin 2.0 and robosuite. Three questions each, thirty-six in all.</p>
+
+  <p><b>With search off, the model answered 12 of the 36 exactly, in 5 of the 12 cases.</b> It got all
+  three in robosuite&rsquo;s Stack task, all three in robosuite&rsquo;s Door, and all three for starting
+  the RoboCasa microwave. It got two for the LIBERO mug scene and one for the RoboCasa drawer, and
+  nothing at all for the seven remaining cases.</p>
+
+  <p>For Stack it gave the 4&nbsp;cm threshold at which cube A counts as lifted, the unscaled reward of
+  2.0 at success, and each cube&rsquo;s half-extents to the millimetre, then volunteered the default
+  table dimensions, 0.8&nbsp;&times;&nbsp;0.8&nbsp;&times;&nbsp;0.05&nbsp;m, which we had not asked for.
+  All of it matches the pinned commit.</p>
+
+  <p>The mug scene is the one worth reading twice. We asked which distractor mug was present. The sheet
+  said a third mug exists, and nothing else. The answer came back as <code>red_coffee_mug_1</code>, the
+  name the scene file uses for it. That name is not in the instruction, not in the task title, and not in
+  any sentence we wrote. It is in the asset file, which the model never opened.</p>
+
+  <figure class="l-page has-setup">
+    <details class="fig-setup">
+      <summary>Setup</summary>
+      <div class="fig-setup-body">
+        <ul>
+          <li><b>Model:</b> <code>gpt-6.1-sol</code>, high reasoning effort, through Codex CLI</li>
+          <li><b>Workspace:</b> a fresh directory per question, holding one task sheet and nothing else,
+            readable, with no shell and no network</li>
+          <li><b>The sheet:</b> benchmark, task name, original instruction, repository, commit, source
+            file path, the three questions, and permission to answer &ldquo;unknown&rdquo;</li>
+          <li><b>Not available:</b> the repository, the answer key, search, and any previous session</li>
+          <li><b>Scoring:</b> exact match by hand against the pinned source, one verdict per field;
+            approximate values were counted separately</li>
+          <li><b>Search arm:</b> the same twelve sheets, verbatim, in fresh sessions with a live search
+            tool; all twelve used it</li>
+        </ul>
+      </div>
+    </details>
+    <div id="qa-figure"></div>
+    <figcaption><b>Each square is one of the 36 questions.</b> A filled square is an exact match.
+    Click a row to see what was asked, what the answer key says, and what the model said. The second
+    tab is the same twelve cases asked again, with search on.</figcaption>
+  </figure>
+
+  <p><b>With search on, the score went to 35 of 36.</b> All twelve sessions reached for the tool, and
+  every case but one came back perfect. The single miss was LIBERO-PRO&rsquo;s object swap, where the
+  task is to put a specified mug in the microwave: even with the source in front of it, the model named
+  the wrong mug instance.</p>
+
+  <p>That miss is the useful part of this experiment. Getting the mug name wrong while reading the
+  repository is the same failure as getting it right from memory in Experiment 1, and it points at what
+  is actually being tested: whether the model can pick one object out of a scene file full of similar
+  ones. Search makes that easier, not automatic.</p>
+
+  <p>What this half shows and what it does not: it shows the model carries enough of these codebases to
+  answer questions a grading script would ask. It does not cleanly separate recall from inference. The
+  sheet leaks that a third mug exists, so a model with a naming convention could guess
+  <code>red_coffee_mug_1</code> without ever having seen it. We did not run the ablation that would
+  settle it.</p>
+
+  <div class="exp-head">
+    <span class="exp-num">Experiment 2</span>
+    <h3>Does knowing which task it is on help the robot pass?</h3>
+  </div>
+
+  <p>Knowing the answer and acting on it are different claims, so the second experiment drops the
+  question entirely and only changes what the tool replies.</p>
+
+  <p>GPT-GEAR, the LIBERO-Plus harness we ran, tells the model which task it is on by default. Its
+  control prompt names <code>LIBERO</code>, and the first call to <code>observe()</code> returns the
+  task suite, a numeric ID, the full task name, the random seed and the initial-state index. None of
+  that is needed to control an arm.</p>
+
+  <p>We left the control prompt alone and changed the tool interface. Both groups ran the same controller
+  prompt, saw the same two cameras, read the same robot state, and got the same calibration, step limit
+  and request limit.</p>
+
+  <figure class="l-page">
+    <img src="assets/fig-interface.svg" alt="The same observation reply twice. With the identifiers hidden the agent reads the instruction and the robot state. With them provided it also reads the benchmark, the suite, a numeric task ID, the full task name, the seed and the initial-state index.">
+    <figcaption><b>One reply from <code>observe()</code>, twice.</b> Both carry the same instruction
+    and the same sensor data. The lower one also carries six fields that describe the episode to the
+    grader, not to the robot.</figcaption>
+  </figure>
+
+  <p>With identifiers hidden, the agent&rsquo;s whole description of the drawer task was the instruction
+  string: &ldquo;open the top layer of the drawer and put the bowl inside&rdquo;. With identifiers
+  provided it read the same sentence plus <code>"task_id": 2365</code>.</p>
+
+  <p>Six tasks, four matched pairs each. Every pair started from the same simulator state and split into
+  two independent model sessions, and the simulator scored both.</p>
+
+  <div class="result">
+    <div class="result-cell off">
+      <div class="result-label">IDs hidden</div>
+      <div class="result-value">8 / 24</div>
+      <div class="result-sub">33.3% of episodes passed</div>
+    </div>
+    <div class="result-cell on">
+      <div class="result-label">IDs provided</div>
+      <div class="result-value">13 / 24</div>
+      <div class="result-sub">54.2% of episodes passed</div>
+    </div>
+  </div>
+
+  <p><b>A gap of 20.8 percentage points, and it is concentrated in five episodes.</b> Nineteen pairs
+  ended the same way whichever way the reply was built. Five passed only when the identifiers were
+  there: the soup can twice, and once each for the moka pots, the bowl in the drawer and the plate on
+  the stove. No pair passed only when they were hidden.</p>
+
+  <figure class="l-page">
+    <img src="assets/scenes.png" alt="First observation from each of the six LIBERO-Plus tasks, external camera on the left and wrist camera on the right, with passes out of four under each with identifiers provided or hidden.">
+    <figcaption><b>What the agent saw first, in all six tasks.</b> The two views are the whole of its
+    input. The counts under each task are passes out of four, with the identifiers provided and
+    hidden.</figcaption>
+  </figure>
+
+  <figure class="l-page">
+    <video controls loop muted playsinline preload="metadata" poster="assets/rollout-poster.jpg">
+      <source src="assets/rollout.mp4" type="video/mp4">
+    </video>
+    <figcaption><b>One episode, at the rate it was recorded.</b> Both camera views, external on the
+    left and wrist on the right, for the moka-pots task with the identifiers provided. This is slot
+    001 in the ledger: a pass, in 1,140 control steps.</figcaption>
+  </figure>
+
+  <p>One of the six tasks never passed at all, in either arm: putting the mug in the microwave and
+  closing the door. Two more cleared a single episode out of eight. That is worth saying plainly. The
+  effect we measured does not rescue a task the agent cannot do.</p>
+
+  <h2>RoboDojo</h2>
+
+  <p>RoboDojo publishes notes on the scaffolds behind each agent on its simulation leaderboard, and marks
+  some of them with an asterisk. Those notes are the organizers&rsquo; work; we only read them. The
+  starred runs predate the current rules, and each asterisk says what would fall outside them today.</p>
+
+  <table>
+    <thead>
+      <tr><th>Agent</th><th>What its scaffold hands the model</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Q0-Preview</td><td>The target coordinates, and the conditions under which points are
+        awarded.</td></tr>
+      <tr><td>PyRUA-Lean</td><td>The same, plus a tolerance: the robot may return to its start pose
+        within 15&nbsp;cm and 20&deg;.</td></tr>
+      <tr><td>SOLVE</td><td>One guide per task, 34 of them, selected by task name: solving the task
+        includes choosing the right document.</td></tr>
+      <tr><td>SenseNova-RoboRSI</td><td>Reference images, notes and recorded trajectories, filed by
+        task.</td></tr>
+      <tr><td>JoyAI-VL</td><td>A button-pressing tool that already names the arm and the order of
+        presses.</td></tr>
+      <tr><td>GO-3 Nano, PhysicalRSI</td><td>Whole action programs, callable by task.</td></tr>
+      <tr><td>HexaShell-Preview</td><td>Notes recording which placements of the eggs had scored
+        before.</td></tr>
+      <tr><td>EmbodiedEvo</td><td>Notes on where contact happened and which step triggered a
+        success.</td></tr>
+      <tr><td>Agent-as-Policy</td><td>A hint that the grader never checks whether the brush was used,
+        so the blocks may simply be picked up.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Read as a group, they are the same finding as ours in a different position. Our model brought the
+  answer with it; these scaffolds deliver the answer through the tool interface. The leaderboard
+  asterisk is what a benchmark can do about it when the run is over.</p>
+
+  <h2>What this changes about a leaderboard</h2>
+
+  <p>Nothing about the robot. Everything about the number.</p>
+
+  <p>A success rate reported with the task ID visible is not comparable to one reported without it, and
+  the two are indistinguishable on a table. That is the whole problem: the difference is invisible in
+  the output, present in the harness, and worth about twenty points in our runs.</p>
+
+  <p>Neither fix is exciting. Report the condition, the way people now report the sampler and the
+  decoding settings. Or do not send task identity to the model at all, and let the instruction carry
+  the task. Both are cheap, and the second costs the agent nothing we could measure: in 19 of 24 pairs
+  the identifiers changed nothing.</p>
+
+  <details>
+    <summary><b>Reproduce both experiments</b></summary>
+    <div class="fig-setup-body" style="position: static; width: auto; margin-top: 10px; box-shadow: none;">
+      <ul>
+        <li><b>Question sessions:</b> authenticate Codex CLI, then <code>python3 runners/query.py</code>.
+          The template is the same in both arms and asks the model to verify its answer if a search tool
+          is present. <a href="https://github.com/DisproofAILab/robot-reward-audit/blob/main/experiments/query-prompt.txt">Template</a>,
+          <a href="https://github.com/DisproofAILab/robot-reward-audit/blob/main/experiments/questions.json">questions and keys</a>,
+          <a href="https://github.com/DisproofAILab/robot-reward-audit/blob/main/results/queries.jsonl">answers and verdicts</a>.</li>
+        <li><b>Manipulation:</b> install the pinned GPT-GEAR and LIBERO-Plus checkouts, Wand and the
+          LIBERO-Plus assets, set <code>GPT_GEAR_ROOT</code>, <code>LIBERO_PLUS_ROOT</code> and
+          <code>SIM_PYTHON</code>. <code>sh runners/local_sim.sh --check-scenes</code> verifies the six
+          starting states, then <code>sh runners/local_sim.sh</code> runs the trials.
+          <a href="https://github.com/DisproofAILab/robot-reward-audit/blob/main/results/episodes.jsonl">Episode ledger</a>,
+          <a href="https://github.com/DisproofAILab/robot-reward-audit/blob/main/experiments/libero-plus.json">task and pair schedule</a>.</li>
+        <li><b>Limits:</b> 200 model requests and 1,200 policy-controlled steps per episode, single
+          seed, initial-state index 0 for both arms.</li>
+        <li><b>Figures:</b> <code>python3 runners/report.py</code> redraws the static figures from the
+          published records; <code>python3 runners/blog_data.py</code> rebuilds the grid above.</li>
+      </ul>
+    </div>
+  </details>
+
+  <h2>Questions we expect</h2>
+
+  <p><b>Is the task ID not just fair context?</b> It is context the grader has and the robot does not
+  need. In 19 of 24 pairs the identifier changed no outcome, which is the honest measure of how much
+  the arm used it. The five that flipped used it. A benchmark is free to allow that, and then should
+  say so.</p>
+
+  <p><b>Could five discordant pairs be noise?</b> Yes, and the test is unforgiving: five pairs in one
+  direction and none in the other gives p&nbsp;=&nbsp;0.0625 on an exact sign test. That is suggestive,
+  not conclusive. We report the count instead of the p-value for that reason.</p>
+
+  <p><b>Why only 24 pairs?</b> Each episode allows 200 model requests and 1,200 controlled steps, and
+  two arms per pair. The run is sized to be reproducible by someone who is not us.</p>
+
+  <p><b>Does this make the leaderboard wrong?</b> No. It makes one column of it underspecified. The
+  agents on it are solving tasks, and some are being helped by their scaffolding. The asterisks are how
+  the organizers say which.</p>
+
+  <figure class="l-page" style="margin-top:34px">
+    <div style="padding:14px 16px; border:1px solid #e4e8e5; border-radius:8px; background:#fcfcfb;
+                font-size:15px; line-height:1.55;">
+      <b>The short version:</b> a benchmark score is a property of the harness, not only of
+      the policy. Two runs that differ only in whether the model was told the task number are not the
+      same run, and the table cannot tell them apart.
+    </div>
+  </figure>
+
+</d-article>
+
+<d-appendix>
+  <h3>Acknowledgements</h3>
+  <p>The LIBERO-Plus harness is <a href="https://github.com/6UOOON9/GPT-GEAR">GPT-GEAR</a>, and the
+  leaderboard notes are from <a href="https://robodojo-benchmark.com/leaderboard?bench=sim">RoboDojo</a>,
+  which we read but did not write. The benchmark checkouts used here are pinned to the commits named in
+  each answer.</p>
+
+  <h3>Citation</h3>
+  <div class="cite-box">@misc{disproof2026answerkey,
+  title  = {Answer-Key Leakage: robot agents score higher when they
+            know which task they are on},
+  author = {Disproof AI Lab},
+  year   = {2026},
+  note   = {https://github.com/DisproofAILab/robot-reward-audit}
+}</div>
+</d-appendix>
+
+<script src="js/qa.js"></script>
+
+<!-- The figures are SVG files. Shown with <img>, an SVG cannot use the page's web fonts, so put each
+     one into the page itself; its text is then set in the page's fonts like everything else. -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('figure img[src$=".svg"]').forEach((img) => {
+    fetch(img.src)
+      .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+      .then((text) => {
+        const svg = new DOMParser().parseFromString(text, "image/svg+xml").documentElement;
+        if (svg.localName !== "svg" || svg.querySelector("parsererror")) return;
+        svg.classList.add("figure-svg");
+        if (img.alt) svg.setAttribute("aria-label", img.alt);
+        img.replaceWith(document.importNode(svg, true));
+      })
+      .catch(() => {});
+  });
+});
+
+// The template re-renders the article after load, which can stop autoplaying video.
+window.addEventListener("load", () => {
+  document.querySelectorAll("video[autoplay]").forEach((v) => v.play().catch(() => {}));
+});
+</script>
+
+</body>
+</html>

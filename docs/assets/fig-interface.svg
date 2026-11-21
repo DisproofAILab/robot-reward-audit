@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 632" role="img"
+     aria-label="The same observation reply twice. With the identifiers hidden the agent reads the instruction and the robot state. With them provided it also reads the benchmark, the suite, a numeric task ID, the full task name, the seed and the initial-state index.">
+  <style>
+    text { font-family: 'JetBrains Mono','Source Code Pro',Menlo,monospace; font-size: 13px; fill: #3a4a4d; white-space: pre; }
+    .k { fill: #086d67; }
+    .q { fill: #8a9a9c; }
+    .a { fill: #118659; }
+    .t { font-family: 'Source Sans 3',Lato,Verdana,sans-serif; font-size: 15px; font-weight: 600; fill: #172e33; }
+    .s { font-family: 'Source Sans 3',Lato,Verdana,sans-serif; font-size: 13px; fill: #74868a; }
+    .box { fill: #fcfcfb; stroke: #e4e8e5; }
+    .box-on { fill: #f6fbf8; stroke: #bcdcc8; }
+  </style>
+
+  <text class="t" x="0" y="14">IDs hidden</text>
+  <text class="s" x="0" y="32">The agent reads the instruction and the robot state.</text>
+  <rect class="box" x="0" y="44" width="760" height="178" rx="5"/>
+  <text x="26" y="71" xml:space="preserve">{</text>
+  <text x="26" y="90" xml:space="preserve">  "observation_id": 0,</text>
+  <text x="26" y="109" class="k" xml:space="preserve">  "instruction": "open the top layer of the drawer and put the bowl inside",</text>
+  <text x="26" y="128" class="q" xml:space="preserve">  "cameras": {"external": {...}, "wrist": {...}},</text>
+  <text x="26" y="147" class="q" xml:space="preserve">  "robot": {"ee_pose": [...], "joint_positions": [...], ...},</text>
+  <text x="26" y="166" class="q" xml:space="preserve">  "status": {"success": false, "terminal": false,</text>
+  <text x="26" y="185" class="q" xml:space="preserve">             "decision_steps": 0, "remaining_steps": 1200}</text>
+  <text x="26" y="204" xml:space="preserve">}</text>
+
+  <text class="t" x="0" y="268">IDs provided</text>
+  <text class="s" x="0" y="286">The same sentence, plus six fields the benchmark already knows.</text>
+  <rect class="box-on" x="0" y="298" width="760" height="330" rx="5"/>
+  <rect x="10" y="445" width="3" height="133" fill="#2e996a" rx="1"/>
+  <text x="26" y="325" xml:space="preserve">{</text>
+  <text x="26" y="344" xml:space="preserve">  "observation_id": 0,</text>
+  <text x="26" y="363" class="k" xml:space="preserve">  "instruction": "open the top layer of the drawer and put the bowl inside",</text>
+  <text x="26" y="382" class="q" xml:space="preserve">  "cameras": {"external": {...}, "wrist": {...}},</text>
+  <text x="26" y="401" class="q" xml:space="preserve">  "robot": {"ee_pose": [...], "joint_positions": [...], ...},</text>
+  <text x="26" y="420" class="q" xml:space="preserve">  "status": {"success": false, "terminal": false,</text>
+  <text x="26" y="439" class="q" xml:space="preserve">             "decision_steps": 0, "remaining_steps": 1200,</text>
+  <text x="26" y="458" class="q" xml:space="preserve">             "task_metadata": {</text>
+  <text x="26" y="477" class="a" xml:space="preserve">               "benchmark": "LIBERO",</text>
+  <text x="26" y="496" class="a" xml:space="preserve">               "task": "libero_goal/2365",</text>
+  <text x="26" y="515" class="a" xml:space="preserve">               "suite": "libero_goal",</text>
+  <text x="26" y="534" class="a" xml:space="preserve">               "task_id": 2365,</text>
+  <text x="26" y="553" class="a" xml:space="preserve">               "task_name": "open the top layer of the drawer and put the bowl inside",</text>
+  <text x="26" y="572" class="a" xml:space="preserve">               "seed": 0,</text>
+  <text x="26" y="591" class="a" xml:space="preserve">               "init_state_index": 0}}}</text>
+  <text x="26" y="610" xml:space="preserve">}</text>
+</svg>
