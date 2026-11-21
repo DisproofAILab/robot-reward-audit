@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 632" role="img"
-     aria-label="同一条 observe() 回复的两种形态。隐藏标识时，Agent 只能读到指令和机械臂状态；提供标识时，它还会读到 Benchmark 名、任务集、题号、完整任务名、随机种子和初始状态编号。">
+     aria-label="同一条 observe() 回复的两种形态。隐藏标识时，Agent 只能读到指令和机械臂状态；下面那一种是 GPT-GEAR 的默认设置，它还会读到 Benchmark 名、任务集、题号、完整任务名、随机种子和初始状态编号。">
   <style>
     text { font-family: 'JetBrains Mono','Source Code Pro',Menlo,monospace; font-size: 13px; fill: #3a4a4d; white-space: pre; }
     .k { fill: #086d67; }
@@ -24,7 +24,7 @@
   <text x="26" y="204" xml:space="preserve">}</text>
 
   <text class="t" x="0" y="268">提供标识</text>
-  <text class="s" x="0" y="286">同一句话，外加六个 Benchmark 早就知道的字段。</text>
+  <text class="s" x="0" y="286">同一句话，外加六个字段——GPT-GEAR 默认就会发。</text>
   <rect class="box-on" x="0" y="298" width="760" height="330" rx="5"/>
   <rect x="10" y="445" width="3" height="133" fill="#2e996a" rx="1"/>
   <text x="26" y="325" xml:space="preserve">{</text>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 632" role="img"
-     aria-label="The same observation reply twice. With the identifiers hidden the agent reads the instruction and the robot state. With them provided it also reads the benchmark, the suite, a numeric task ID, the full task name, the seed and the initial-state index.">
+     aria-label="The same observation reply twice. With the identifiers hidden the agent reads the instruction and the robot state. The lower panel is GPT-GEAR's default: it also reads the benchmark, the suite, a numeric task ID, the full task name, the seed and the initial-state index.">
   <style>
     text { font-family: 'JetBrains Mono','Source Code Pro',Menlo,monospace; font-size: 13px; fill: #3a4a4d; white-space: pre; }
     .k { fill: #086d67; }
@@ -24,7 +24,7 @@
   <text x="26" y="204" xml:space="preserve">}</text>
 
   <text class="t" x="0" y="268">IDs provided</text>
-  <text class="s" x="0" y="286">The same sentence, plus six fields the benchmark already knows.</text>
+  <text class="s" x="0" y="286">The same sentence, plus six fields GPT-GEAR sends by default.</text>
   <rect class="box-on" x="0" y="298" width="760" height="330" rx="5"/>
   <rect x="10" y="445" width="3" height="133" fill="#2e996a" rx="1"/>
   <text x="26" y="325" xml:space="preserve">{</text>

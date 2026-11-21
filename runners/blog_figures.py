@@ -38,19 +38,21 @@ LABELS = {
         "hidden": "IDs hidden",
         "hidden_sub": "The agent reads the instruction and the robot state.",
         "shown": "IDs provided",
-        "shown_sub": "The same sentence, plus six fields the benchmark already knows.",
+        "shown_sub": "The same sentence, plus six fields GPT-GEAR sends by default.",
         "alt": ("The same observation reply twice. With the identifiers hidden the agent reads the "
-                "instruction and the robot state. With them provided it also reads the benchmark, the "
-                "suite, a numeric task ID, the full task name, the seed and the initial-state index."),
+                "instruction and the robot state. The lower panel is GPT-GEAR's default: it also reads "
+                "the benchmark, the suite, a numeric task ID, the full task name, the seed and the "
+                "initial-state index."),
         "sans": SANS,
     },
     "zh": {
         "hidden": "隐藏标识",
         "hidden_sub": "Agent 只能读到指令和机械臂状态。",
         "shown": "提供标识",
-        "shown_sub": "同一句话，外加六个 Benchmark 早就知道的字段。",
+        "shown_sub": "同一句话，外加六个字段——GPT-GEAR 默认就会发。",
         "alt": ("同一条 observe() 回复的两种形态。隐藏标识时，Agent 只能读到指令和机械臂状态；"
-                "提供标识时，它还会读到 Benchmark 名、任务集、题号、完整任务名、随机种子和初始状态编号。"),
+                "下面那一种是 GPT-GEAR 的默认设置，它还会读到 Benchmark 名、任务集、题号、完整任务名、"
+                "随机种子和初始状态编号。"),
         "sans": "'PingFang SC','Noto Sans CJK SC','Source Han Sans SC'," + SANS,
     },
 }
