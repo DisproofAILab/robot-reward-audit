@@ -78,17 +78,18 @@ def draw_query_grid(cases, case_scores, mode, chinese):
     fig, ax = canvas(6, 8) if chinese else canvas(8.4, 5.8)
     if mode == "offline":
         stem = "query"
-        heading = "关掉搜索，Agent 还能答出什么？" if chinese else "What did the agent know with search off?"
+        heading = "关掉网络访问，Agent 还能答出什么？" if chinese else "What did the agent know with no network access?"
     else:
         stem = "query-search"
-        heading = "同样的问题，打开搜索后呢？" if chinese else "Same questions, with search on"
-    subhead = (f"{denominator} 项隐藏细节，精确答对 {n} 项，分布在 {matched_cases} 个案例中。"
+        heading = "同样的问题，打开网络访问后呢？" if chinese else "Same questions, with network access"
+    subhead = (f"{denominator} 项隐藏细节，精确答对 {n} 项，{len(cases)} 个案例里有 {matched_cases} 个命中。"
                if chinese else f"{n} of {denominator} hidden details matched exactly, across {matched_cases} of {len(cases)} cases.")
     label(ax, .055, .94, heading, size=20, bold=True)
     label(ax, .055, .864, subhead, size=12, color=TEAL, bold=True)
     bench_x, task_x, score_x = .055, .40, .76
     headers = ("评测名称", "案例", "三个问题") if chinese else ("Benchmark", "Case", "Three questions")
-    for x, header in zip((bench_x, task_x, score_x), headers, strict=True):
+    assert len(headers) == 3
+    for x, header in zip((bench_x, task_x, score_x), headers):
         label(ax, x, .78, header, color=MUTED, size=10)
     last = None
     for i, case in enumerate(cases):
@@ -250,7 +251,8 @@ if __name__ == "__main__":
     chinese = parser.parse_args().zh
     if chinese:
         fonts = {font.name for font in font_manager.fontManager.ttflist}
-        candidates = ("PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Heiti SC", "Microsoft YaHei")
+        candidates = ("PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Heiti SC",
+                      "Arial Unicode MS", "Microsoft YaHei", "Hiragino Sans GB", "Songti SC")
         available = next((f for f in candidates if f in fonts), None)
         if available is None:
             parser.error("Install a Simplified Chinese font such as Noto Sans CJK SC")
