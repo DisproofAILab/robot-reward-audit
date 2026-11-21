@@ -291,31 +291,23 @@
   <h2>RoboDojo</h2>
 
   <p>RoboDojo publishes notes on the scaffolds behind each agent on its simulation leaderboard, and marks
-  some of them with an asterisk. Those notes are the organizers&rsquo; work; we only read them. The
-  starred runs predate the current rules, and each asterisk says what would fall outside them today.</p>
+  some of them with an asterisk. Those notes are the organizers&rsquo; own. The starred runs predate the
+  current rules, and each asterisk says what would fall outside them today.</p>
 
   <table>
     <thead>
-      <tr><th>Agent</th><th>What its scaffold hands the model</th></tr>
+      <tr><th>What its scaffold hands the model</th></tr>
     </thead>
     <tbody>
-      <tr><td>Q0-Preview</td><td>The target coordinates, and the conditions under which points are
-        awarded.</td></tr>
-      <tr><td>PyRUA-Lean</td><td>The same, plus a tolerance: the robot may return to its start pose
-        within 15&nbsp;cm and 20&deg;.</td></tr>
-      <tr><td>SOLVE</td><td>One guide per task, 34 of them, selected by task name: solving the task
-        includes choosing the right document.</td></tr>
-      <tr><td>SenseNova-RoboRSI</td><td>Reference images, notes and recorded trajectories, filed by
-        task.</td></tr>
-      <tr><td>JoyAI-VL</td><td>A button-pressing tool that already names the arm and the order of
-        presses.</td></tr>
-      <tr><td>GO-3 Nano, PhysicalRSI</td><td>Whole action programs, callable by task.</td></tr>
-      <tr><td>HexaShell-Preview</td><td>Notes recording which placements of the eggs had scored
-        before.</td></tr>
-      <tr><td>EmbodiedEvo</td><td>Notes on where contact happened and which step triggered a
-        success.</td></tr>
-      <tr><td>Agent-as-Policy</td><td>A hint that the grader never checks whether the brush was used,
-        so the blocks may simply be picked up.</td></tr>
+      <tr><td>The target coordinates, and the conditions under which points are awarded.</td></tr>
+      <tr><td>The same, plus a tolerance: the robot may return to its start pose within 15&nbsp;cm and 20&deg;.</td></tr>
+      <tr><td>One guide per task, 34 of them, selected by task name: solving the task includes choosing the right document.</td></tr>
+      <tr><td>Reference images, notes and recorded trajectories, filed by task.</td></tr>
+      <tr><td>A button-pressing tool that already names the arm and the order of presses.</td></tr>
+      <tr><td>Whole action programs, callable by task.</td></tr>
+      <tr><td>Notes recording which placements of the eggs had scored before.</td></tr>
+      <tr><td>Notes on where contact happened and which step triggered a success.</td></tr>
+      <tr><td>A hint that the grader never checks whether the brush was used, so the blocks may simply be picked up.</td></tr>
     </tbody>
   </table>
 
@@ -331,10 +323,10 @@
   the two are indistinguishable on a table. That is the whole problem: the difference is invisible in
   the output, present in the harness, and worth about twenty points in our runs.</p>
 
-  <p>Neither fix is exciting. Report the condition, the way people now report the sampler and the
-  decoding settings. Or do not send task identity to the model at all, and let the instruction carry
-  the task. Both are cheap, and the second costs the agent nothing we could measure: in 19 of 24 pairs
-  the identifiers changed nothing.</p>
+  <p>There are two fixes, and neither is clever. Report the condition, the way people now report the
+  sampler and the decoding settings. Or do not send task identity to the model at all, and let the
+  instruction carry the task. Both are cheap, and the second costs the agent nothing we could
+  measure: in 19 of 24 pairs the identifiers changed nothing.</p>
 
   <details>
     <summary><b>Reproduce both experiments</b></summary>
@@ -361,21 +353,30 @@
 
   <h2>Questions we expect</h2>
 
-  <p><b>Is the task ID not just fair context?</b> It is context the grader has and the robot does not
-  need. In 19 of 24 pairs the identifier changed no outcome, which is the honest measure of how much
-  the arm used it. The five that flipped used it. A benchmark is free to allow that, and then should
-  say so.</p>
-
-  <p><b>Could five discordant pairs be noise?</b> Yes, and the test is unforgiving: five pairs in one
-  direction and none in the other gives p&nbsp;=&nbsp;0.0625 on an exact sign test. That is suggestive,
-  not conclusive. We report the count instead of the p-value for that reason.</p>
-
-  <p><b>Why only 24 pairs?</b> Each episode allows 200 model requests and 1,200 controlled steps, and
-  two arms per pair. The run is sized to be reproducible by someone who is not us.</p>
-
-  <p><b>Does this make the leaderboard wrong?</b> No. It makes one column of it underspecified. The
-  agents on it are solving tasks, and some are being helped by their scaffolding. The asterisks are how
-  the organizers say which.</p>
+  <div class="faq">
+    <div class="faq-item">
+      <span class="faq-n" aria-hidden="true">01</span>
+      <p class="faq-q">Is the task ID not just fair context?</p>
+      <p class="faq-a">It is context the grader has and the robot does not need. In 19 of 24 pairs the identifier changed no outcome, which is the honest measure of how much the arm used it. The five that flipped used it. A benchmark is free to allow that, and then should say so.</p>
+    </div>
+    <div class="faq-item">
+      <span class="faq-n" aria-hidden="true">02</span>
+      <p class="faq-q">Could five discordant pairs be noise?</p>
+      <p class="faq-a">Yes, and the test is unforgiving: five pairs in one direction and none in the other gives p&nbsp;=&nbsp;0.0625 on an exact sign test. That is suggestive, not conclusive. We report the count instead of the p-value for that reason.</p>
+    </div>
+    <div class="faq-item">
+      <span class="faq-n" aria-hidden="true">03</span>
+      <p class="faq-q">Why only 24 pairs?</p>
+      <p class="faq-a">Mostly budget. Each episode allows 200 model requests and 1,200 controlled steps,
+      and each pair runs two of them, so 24 pairs is what we could afford. We are waiting for our Codex
+      quota to reset (haha); when it does, we will add pairs and re-run the five that flipped.</p>
+    </div>
+    <div class="faq-item">
+      <span class="faq-n" aria-hidden="true">04</span>
+      <p class="faq-q">Does this make the leaderboard wrong?</p>
+      <p class="faq-a">No. It makes one column of it underspecified. The agents on it are solving tasks, and some are being helped by their scaffolding. The asterisks are how the organizers say which.</p>
+    </div>
+  </div>
 
   <figure class="l-page" style="margin-top:34px">
     <div style="padding:14px 16px; border:1px solid #e4e8e5; border-radius:8px; background:#fcfcfb;
@@ -391,8 +392,7 @@
 <d-appendix>
   <h3>Acknowledgements</h3>
   <p>The LIBERO-Plus harness is <a href="https://github.com/6UOOON9/GPT-GEAR">GPT-GEAR</a>, and the
-  leaderboard notes are from <a href="https://robodojo-benchmark.com/leaderboard?bench=sim">RoboDojo</a>,
-  which we read but did not write. The benchmark checkouts used here are pinned to the commits named in
+  leaderboard notes are <a href="https://robodojo-benchmark.com/leaderboard?bench=sim">RoboDojo</a>&rsquo;s. The benchmark checkouts used here are pinned to the commits named in
   each answer.</p>
 
   <h3>Citation</h3>

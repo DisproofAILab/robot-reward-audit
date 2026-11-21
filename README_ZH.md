@@ -64,19 +64,19 @@ Stack 那题它给了 4 厘米的抬起阈值、成功时未缩放的奖励 2.0�
 
 ## RoboDojo
 
-[RoboDojo](https://robodojo-benchmark.com/leaderboard?bench=sim) 在仿真榜单上给每个 Agent 的脚手架写了说明，其中一些挂了星号。**这些说明是主办方写的，我们只是读，没有替他们下结论。** 带星号的运行发生在新规则之前，每个星号指的是：按今天的[规则](https://robodojo-benchmark.com/leaderboard/protocol?lang=en#agent-track-rules)，这条会出问题。
+[RoboDojo](https://robodojo-benchmark.com/leaderboard?bench=sim) 在仿真榜单上给每个 Agent 的脚手架写了说明，其中一些挂了星号。**这些说明是主办方自己的说法。** 带星号的运行发生在新规则之前，每个星号指的是：按今天的[规则](https://robodojo-benchmark.com/leaderboard/protocol?lang=en#agent-track-rules)，这条会出问题。
 
-| Agent | 脚手架交给模型什么 |
-| --- | --- |
-| [Q0-Preview](https://robodojo-benchmark.com/leaderboard/rollouts/Q0_Preview?bench=sim) | 目标坐标，以及什么条件下会得分。 |
-| [PyRUA-Lean](https://robodojo-benchmark.com/leaderboard/rollouts/PyRUA_Lean?bench=sim) | 同上，外加一个容差：回到起点时，位置允许差 15 厘米、角度允许差 20°。 |
-| [SOLVE](https://robodojo-benchmark.com/leaderboard/rollouts/nvidia?bench=sim) | 34 个任务各一份指南，按任务名选：做对这题，也包括挑对文档。 |
-| [SenseNova-RoboRSI](https://robodojo-benchmark.com/leaderboard/rollouts/SenseNova-RoboRSI?bench=sim) | 按任务归档的参考图、笔记和轨迹录像。 |
-| [JoyAI-VL](https://robodojo-benchmark.com/leaderboard/rollouts/JoyAI-VL?bench=sim) | 按键工具已经写好了用哪只手、先按哪个键。 |
-| [GO-3 Nano](https://robodojo-benchmark.com/leaderboard/rollouts/GO-3%20Nano%20Preview?bench=sim) / [PhysicalRSI](https://robodojo-benchmark.com/leaderboard/rollouts/KAI?bench=sim) | 整段操作程序，按任务直接调用。 |
-| [HexaShell-Preview](https://robodojo-benchmark.com/leaderboard/rollouts/HexaShell-preview?bench=sim) | 笔记里记着鸡蛋怎么摆才拿到过分。 |
-| [EmbodiedEvo](https://robodojo-benchmark.com/leaderboard/rollouts/EmbodiedEvo?bench=sim) | 笔记里记着之前在哪儿碰到物体、哪一步触发了成功。 |
-| [Agent-as-Policy](https://robodojo-benchmark.com/leaderboard/rollouts/AGP?bench=sim) | 提示里说评分程序没查刷子用没用，所以积木可以直接抓进去。 |
+| 脚手架交给模型什么 |
+| --- |
+| 目标坐标，以及什么条件下会得分。 |
+| 同上，外加一个容差：回到起点时，位置允许差 15 厘米、角度允许差 20°。 |
+| 34 个任务各一份指南，按任务名选：做对这题，也包括挑对文档。 |
+| 按任务归档的参考图、笔记和轨迹录像。 |
+| 按键工具已经写好了用哪只手、先按哪个键。 |
+| 整段操作程序，按任务直接调用。 |
+| 笔记里记着鸡蛋怎么摆才拿到过分。 |
+| 笔记里记着之前在哪儿碰到物体、哪一步触发了成功。 |
+| 提示里说评分程序没查刷子用没用，所以积木可以直接抓进去。 |
 
 放在一起看，这和我们的发现是同一件事的两个位置：我们这边，答案在模型肚子里；这些脚手架那边，答案从工具接口递过去。
 
@@ -86,7 +86,7 @@ Stack 那题它给了 4 厘米的抬起阈值、成功时未缩放的奖励 2.0�
 
 带题号刷出来的成功率，和不带题号的，本来就没法比——可表格上两者长得一模一样。这才是问题所在：差别不在输出里，在脚手架里，而且在我们这次跑出来，值二十个点左右。
 
-两条修法都不新鲜。要么像现在报告采样器和解码参数那样，把条件一并报出来；要么干脆不把题号发给模型，让指令自己把任务说清楚。两条都便宜，而且对我们量到的这个 Agent，第二条没有代价——19 对里，题号什么都没改变。
+有两条修法，都谈不上高明。要么像现在报告采样器和解码参数那样，把条件一并报出来；要么干脆不把题号发给模型，让指令自己把任务说清楚。两条都便宜，而且对我们量到的这个 Agent，第二条没有代价——19 对里，题号什么都没改变。
 
 <a id="reproduce-the-experiments"></a>
 <details>

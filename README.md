@@ -110,21 +110,21 @@ measured does not rescue a task the agent cannot do.
 
 [RoboDojo](https://robodojo-benchmark.com/leaderboard?bench=sim) publishes notes on the scaffolds
 behind each agent on its simulation leaderboard, and marks some of them with an asterisk. **Those
-notes are the organizers' work; we only read them.** The starred runs predate the current
+notes are the organizers' own.** The starred runs predate the current
 [Agent Track rules](https://robodojo-benchmark.com/leaderboard/protocol?lang=en#agent-track-rules),
 and each asterisk says what would fall outside them today.
 
-| Agent | What its scaffold hands the model |
-| --- | --- |
-| [Q0-Preview](https://robodojo-benchmark.com/leaderboard/rollouts/Q0_Preview?bench=sim) | The target coordinates, and the conditions under which points are awarded. |
-| [PyRUA-Lean](https://robodojo-benchmark.com/leaderboard/rollouts/PyRUA_Lean?bench=sim) | The same, plus a tolerance: the robot may return to its start pose within 15 cm and 20°. |
-| [SOLVE](https://robodojo-benchmark.com/leaderboard/rollouts/nvidia?bench=sim) | One guide per task, 34 of them, selected by task name: solving the task includes choosing the right document. |
-| [SenseNova-RoboRSI](https://robodojo-benchmark.com/leaderboard/rollouts/SenseNova-RoboRSI?bench=sim) | Reference images, notes and recorded trajectories, filed by task. |
-| [JoyAI-VL](https://robodojo-benchmark.com/leaderboard/rollouts/JoyAI-VL?bench=sim) | A button-pressing tool that already names the arm and the order of presses. |
-| [GO-3 Nano](https://robodojo-benchmark.com/leaderboard/rollouts/GO-3%20Nano%20Preview?bench=sim), [PhysicalRSI](https://robodojo-benchmark.com/leaderboard/rollouts/KAI?bench=sim) | Whole action programs, callable by task. |
-| [HexaShell-Preview](https://robodojo-benchmark.com/leaderboard/rollouts/HexaShell-preview?bench=sim) | Notes recording which placements of the eggs had scored before. |
-| [EmbodiedEvo](https://robodojo-benchmark.com/leaderboard/rollouts/EmbodiedEvo?bench=sim) | Notes on where contact happened and which step triggered a success. |
-| [Agent-as-Policy](https://robodojo-benchmark.com/leaderboard/rollouts/AGP?bench=sim) | A hint that the grader never checks whether the brush was used, so the blocks may simply be picked up. |
+| What its scaffold hands the model |
+| --- |
+| The target coordinates, and the conditions under which points are awarded. |
+| The same, plus a tolerance: the robot may return to its start pose within 15 cm and 20°. |
+| One guide per task, 34 of them, selected by task name: solving the task includes choosing the right document. |
+| Reference images, notes and recorded trajectories, filed by task. |
+| A button-pressing tool that already names the arm and the order of presses. |
+| Whole action programs, callable by task. |
+| Notes recording which placements of the eggs had scored before. |
+| Notes on where contact happened and which step triggered a success. |
+| A hint that the grader never checks whether the brush was used, so the blocks may simply be picked up. |
 
 Read as a group, they are the same finding as ours in a different position. Our model brought the
 answer with it; these scaffolds deliver the answer through the tool interface.
@@ -137,10 +137,10 @@ A success rate reported with the task ID visible is not comparable to one report
 two are indistinguishable on a table. That is the whole problem: the difference is invisible in the
 output, present in the harness, and worth about twenty points in our runs.
 
-Neither fix is exciting. Report the condition, the way people now report the sampler and the decoding
-settings. Or do not send task identity to the model at all, and let the instruction carry the task.
-Both are cheap, and the second costs the agent nothing we could measure: in 19 of 24 pairs the
-identifiers changed nothing.
+There are two fixes, and neither is clever. Report the condition, the way people now report the
+sampler and the decoding settings. Or do not send task identity to the model at all, and let the
+instruction carry the task. Both are cheap, and the second costs the agent nothing we could measure:
+in 19 of 24 pairs the identifiers changed nothing.
 
 <a id="reproduce-the-experiments"></a>
 <details>
