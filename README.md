@@ -1,67 +1,189 @@
-# Can giving a robot agent a few task IDs raise its success rate by 20.8 percentage points?
+# Robot agents score higher when they know which task they are on
 
-*How Robot Agents Hack Benchmark Success Rates* · [中文版](README_ZH.md) · [Full post](https://disproofailab.github.io/robot-reward-audit/)
+*How robot agents hack benchmark success rates* · [中文版](README_ZH.md) · [Full post](https://disproofailab.github.io/robot-reward-audit/)
+
+We graded a robot agent on a benchmark whose reward it is not supposed to read. It already knew a
+fair amount of that reward, and handing it the task's name and number made it better at the task.
+
+With **no network access**, `gpt-6.1-sol` reproduced **12 of 36** withheld details from six benchmark
+codebases exactly, including an internal object name it had never been shown. With **network access**
+it got **35 of 36**. Then, over 24 matched pairs in LIBERO-Plus, **13 of 24** episodes passed with the
+task ID in the tool reply and **8** without it. Five pairs flipped. The other nineteen did not move.
 
 ![Success rates in our LIBERO-Plus runs for six tasks. Each pair of bars compares runs with identifiers against runs without, four episodes each.](figures/manipulation.png)
 
-Same robot, same instructions, same starting scenes. With benchmark identifiers, `gpt-6.1-sol` passed **13 of 24** episodes. With the identifiers hidden, it passed **8 of 24**. Could the agent have recognized a task and recalled how to solve it? We first tested what it could recall, then whether that recall changed what it could do.
+## What counts as answer-key leakage
 
-## Experiment 1 · Has the language model memorized benchmark answers?
+A benchmark is supposed to score behaviour. Its reward is computed by code the agent cannot read, over
+files the agent cannot open, and it only fires once the episode ends.
 
-We created a fresh folder for every question session. Its single task sheet was the only file the agent could read. We disabled search, shell access and external data access. The sheet named the benchmark, the task, its original instruction, the repository, the exact revision and the source path. We asked the model to recall three details, give precise values where possible, and say “unknown” when unsure. The source code and answer key stayed outside its workspace.
+Two things break that arrangement. The model may already hold a copy of the grading code in its
+weights, so "how is this scored" has an answer it can recall. Or the tool interface may tell the agent
+which task it is running, which tells it which reward is being applied.
 
-We sampled two cases from each of six benchmarks. Here are the three questions for the robosuite **Stack** case, alongside the agent’s offline answers.
+Either way the score stops measuring only what the robot did, and starts measuring what the model
+could retrieve. We tested both: first whether the model can state the answer, then whether stating it
+changes what the arm does.
+
+## Experiment 1 · Can the model recall a benchmark's source code?
+
+One question at a time, each in a fresh folder holding nothing but a task sheet. Search, shell access
+and network reads were off; the source code and the answer key stayed outside the workspace. The sheet
+named the benchmark, the task, the original instruction, the repository, the exact commit and the file
+path, and asked for three details that code settles. The model was allowed to answer "unknown".
+
+We drew two cases from each of six benchmarks — RoboCasa365, LIBERO, LIBERO-PRO, LIBERO-Plus,
+RoboTwin 2.0 and robosuite — three questions each, thirty-six in all.
+
+**With no network access, the model answered 12 of the 36 exactly, in 5 of the 12 cases.** It got all
+three in robosuite's Stack, all three in robosuite's Door, and all three for starting the RoboCasa
+microwave. Two for the LIBERO mug scene, one for the RoboCasa drawer, nothing for the other seven
+cases.
+
+For Stack it gave the 4 cm lift threshold, the unscaled reward of 2.0 at success, and each cube's
+half-extents to the millimetre, then volunteered the default table dimensions, 0.8 × 0.8 × 0.05 m,
+which we had not asked for. All of it matches the pinned commit.
 
 | What we asked | What the agent answered |
 | --- | --- |
-| How high above the table must cube A’s center be to qualify as lifted? | Strictly more than 4 cm |
+| How high above the table must cube A's centre be to count as lifted? | Strictly more than 4 cm |
 | What is the unscaled reward for a successful stack? | 2.0 |
-| What are the two cubes’ half-extents along each axis? | 2 cm for A and 2.5 cm for B on all three axes |
+| What are the two cubes' half-extents along each axis? | 2 cm for A and 2.5 cm for B, on all three axes |
 
-All three matched. The model also volunteered the default table dimensions, **0.8 × 0.8 × 0.05 m**, which we had never asked for. Those also match the pinned source. [Questions and frozen keys](experiments/questions.json) · [Stack implementation](https://github.com/ARISE-Initiative/robosuite/blob/5ce6643f3092639d08f7b0f90ed1c6a84f50552c/robosuite/environments/manipulation/stack.py#L153-L183)
+The mug scene is the one worth reading twice. We asked which distractor mug was present; the sheet
+said only that a third mug exists. The answer came back as `red_coffee_mug_1`, the name the scene file
+uses for it. That name is in no instruction, no task title and no sentence we wrote. It is in the
+asset file, which the model never opened.
 
 ![Offline answers by case. Each filled square is an exact match to one of the three withheld details.](figures/query.png)
 
-**With no network access, the agent got 12 of 36 details right, in 5 of 12 cases.** It got all three for stacking cubes, opening the robosuite door and starting the RoboCasa microwave. It got two for the LIBERO mug task and one for the RoboCasa drawer. The remaining seven cases yielded zero exact matches.
+**With network access the score went to 35 of 36.** All twelve sessions reached for the tool, and every
+case but one came back perfect. The single miss was LIBERO-PRO's object swap, where the task is to put
+a specified mug in the microwave: even with the source in front of it, the model named the wrong mug
+instance.
 
-One question asked which distractor mug was present. That wording gave away the existence of a third mug. The agent supplied its unprompted internal name, **`red_coffee_mug_1`**. That suggests it knows the implementation. Other correct fields could also be inferred from the cues.
+That miss is the useful part of this experiment. Getting the mug name wrong while reading the
+repository is the same failure as getting it right from memory in the first half, and it points at
+what is actually being tested: whether the model can pick one object out of a scene file full of
+similar ones. Search makes that easier, not automatic.
 
-**Same questions, network access.** We repeated each case verbatim in a fresh session with live search available. All 12 used it, and the score rose to **35/36**. [Answers, tool events and field scores](results/queries.jsonl)
+What this half shows and what it does not: it shows the model carries enough of these codebases to
+answer questions a grading script would ask. It does not cleanly separate recall from inference. The
+sheet leaks that a third mug exists, so a model with a naming convention could guess
+`red_coffee_mug_1` without ever having seen it. We did not run the ablation that would settle it.
 
-![Results with network access, in the same order as the offline grid. The only empty square is the first question in the LIBERO-PRO microwave object-swap case.](figures/query-search.png)
+## Experiment 2 · Does knowing the task help the robot pass?
 
-## Experiment 2 · Could recognizing the benchmark help the robot pass?
+Knowing the answer and acting on it are different claims, so the second experiment drops the question
+entirely and only changes what the tool replies.
 
-By default, **GPT-GEAR** tells the model which **LIBERO-Plus** task it is running. Its control prompt names `LIBERO`. The first call to `observe()` returns the task suite, numeric ID, full task name, random seed and initial-state index. [Default control prompt](https://github.com/6UOOON9/GPT-GEAR/blob/77a538afd492b58486741776016578349939c024/src/environments/libero_plus/prompts/control.md#L89-L90) · [Task identifiers in GPT-GEAR](https://github.com/6UOOON9/GPT-GEAR/blob/77a538afd492b58486741776016578349939c024/src/environments/libero_native.py#L84-L86)
+[GPT-GEAR](https://github.com/6UOOON9/GPT-GEAR), the LIBERO-Plus harness we ran, tells the model which
+task it is on by default. Its control prompt names `LIBERO`, and the first call to `observe()` returns
+the task suite, a numeric ID, the full task name, the random seed and the initial-state index. None of
+that is needed to control an arm.
 
-We adapted the tool interface and used the same control prompt in both groups. With **IDs hidden**, the agent’s entire description of the drawer task was *“open the top layer of the drawer and put the bowl inside”*. With **IDs provided**, the agent got the same sentence, plus the benchmark family (`LIBERO`), suite (`libero_goal`), task ID (`2365`), full task name, seed and initial-state index in the tool replies. [Our tool interface](runners/robot.py)
+We left the control prompt alone and changed the tool interface. Both groups ran the same controller
+prompt, saw the same two cameras, read the same robot state, and got the same calibration, step limit
+and request limit.
 
-In both groups the model saw the external and wrist camera views and read the robot’s state. It told the gripper how far to move or turn and whether to open or close. After each action it got fresh images and feedback to choose its next move. Both groups had the same camera calibration, step limit and model request limit.
+![One reply from observe(), twice. Both carry the same instruction and the same sensor data. The lower one also carries six fields that describe the episode to the grader, not to the robot.](docs/assets/fig-interface.png)
 
-![Starting views for six GPT-GEAR tasks. Each shows the external camera on the left, the wrist camera on the right, and passes out of four with task IDs provided or hidden.](figures/gpt-gear-scenes.png)
+With identifiers hidden, the agent's whole description of the drawer task was the instruction string:
+"open the top layer of the drawer and put the bowl inside". With identifiers provided it read the same
+sentence plus `"task_id": 2365`.
 
-Each of six tasks ran in four matched pairs. Each pair started from the same physical state in two independent model sessions. The simulator scored each run. **The success rate was 54.2% (13/24) with IDs and 33.3% (8/24) without them, a gap of 20.8 percentage points.** The five extra passes in the cover figure came from the soup can (two), moka pots, drawer and plate (one each). Five pairs passed only with identifiers. The other 19 agreed. [Episode ledger](results/episodes.jsonl) · [Watch a rollout](results/first-episode.mp4)
+Six tasks, four matched pairs each. Every pair started from the same simulator state and split into
+two independent model sessions, and the simulator scored both.
 
-<a id="reproduce-the-experiments"></a>
-<details>
-<summary><strong>Reproduce the experiments and figures</strong></summary>
+**The success rate was 54.2% (13/24) with the identifiers and 33.3% (8/24) without them, a gap of 20.8
+percentage points.** Nineteen pairs ended the same way whichever way the reply was built. Five passed
+only when the identifiers were there: the soup can twice, and once each for the moka pots, the bowl in
+the drawer and the plate on the stove. No pair passed only when they were hidden.
 
-Use Python 3.11 with NumPy, Matplotlib and FFmpeg on the path. From the repository root, `python3 runners/report.py` rebuilds the English figures from the published records. Add `--zh` for the Chinese portrait figures with a Simplified Chinese font installed.
+![First observation from each of the six LIBERO-Plus tasks, external camera on the left and wrist camera on the right, with passes out of four under each with identifiers provided or hidden.](figures/gpt-gear-scenes.png)
 
-For fresh question sessions, authenticate Codex CLI and run `python3 runners/query.py`. Both settings use the same Chinese template, which asks the model to verify answers if a search tool is available. The question file includes English translations and the pinned answer keys. Only the prompt and case metadata are delivered to the agent. Count exact matches per field and record explicitly approximate answers separately. [Prompt template](experiments/query-prompt.txt)
-
-For manipulation, install the pinned GPT-GEAR and LIBERO-Plus checkouts, Wand/ImageMagick and the LIBERO-Plus assets. Set `GPT_GEAR_ROOT`, `LIBERO_PLUS_ROOT` and `SIM_PYTHON`. Run `sh runners/local_sim.sh --check-scenes` to check the starting states, then `sh runners/local_sim.sh` for the trials. Use `--task libero_goal/2365` to run the drawer subset. Both experiments use high reasoning effort and write fresh logs under `runs/`. Each episode allows 200 model requests and 1,200 policy-controlled steps after 10 settling steps. [Simulator setup](https://github.com/6UOOON9/GPT-GEAR/blob/77a538afd492b58486741776016578349939c024/docs/installation.md) · [Runtime versions](experiments/runtime.json) · [Assets](https://huggingface.co/datasets/Sylvest/LIBERO-plus/tree/dd2bd61b7d9a6fef1abc52d606e983b41886a149) · [Scene and pair schedule](experiments/libero-plus.json)
-
-To inspect a decision in the compressed trace, find its slot in the episode ledger. Its zero-based video frame is `first_frame + observation_id`. Each frame contains the external view on the left and the wrist view on the right. [Actions and visible reasoning summaries](results/robot-traces.jsonl.gz) · [Lossless recordings](results/views)
-
-</details>
+One of the six tasks never passed at all, in either arm: putting the mug in the microwave and closing
+the door. Two more cleared a single episode out of eight. That is worth saying plainly. The effect we
+measured does not rescue a task the agent cannot do.
 
 ## RoboDojo
 
-We also read the notes the organizers give each agent on the sim leaderboard. **The findings are the RoboDojo team’s. We’ve summarized them here.** The starred agents ran before the latest rules came out. Each asterisk explains what would fall outside those rules today. [Leaderboard](https://robodojo-benchmark.com/leaderboard?bench=sim) · [Agent Track rules](https://robodojo-benchmark.com/leaderboard/protocol?lang=en#agent-track-rules) · [Organizers’ update](https://robodojo-benchmark.com/)
+[RoboDojo](https://robodojo-benchmark.com/leaderboard?bench=sim) publishes notes on the scaffolds
+behind each agent on its simulation leaderboard, and marks some of them with an asterisk. **Those
+notes are the organizers' work; we only read them.** The starred runs predate the current
+[Agent Track rules](https://robodojo-benchmark.com/leaderboard/protocol?lang=en#agent-track-rules),
+and each asterisk says what would fall outside them today.
 
-- Q0-Preview’s prompt included target coordinates and told the model when it would earn points. PyRUA-Lean even specified how close the robot had to get when returning to its starting pose (within 15 cm and 20°). [Q0-Preview](https://robodojo-benchmark.com/leaderboard/rollouts/Q0_Preview?bench=sim) · [PyRUA-Lean](https://robodojo-benchmark.com/leaderboard/rollouts/PyRUA_Lean?bench=sim)
-- SOLVE had a separate guide for each of 34 tasks and picked one by name. SenseNova-RoboRSI also supplied reference images, notes and recorded trajectories for individual tasks. [SOLVE](https://robodojo-benchmark.com/leaderboard/rollouts/nvidia?bench=sim) · [SenseNova-RoboRSI](https://robodojo-benchmark.com/leaderboard/rollouts/SenseNova-RoboRSI?bench=sim)
-- JoyAI-VL’s button-pressing tool already specified which arm to use and which button to press first. GO-3 Nano and PhysicalRSI could call an entire program for the task. [JoyAI-VL](https://robodojo-benchmark.com/leaderboard/rollouts/JoyAI-VL?bench=sim) · [GO-3 Nano](https://robodojo-benchmark.com/leaderboard/rollouts/GO-3%20Nano%20Preview?bench=sim) · [PhysicalRSI](https://robodojo-benchmark.com/leaderboard/rollouts/KAI?bench=sim)
-- HexaShell-Preview’s notes recorded which ways of placing the eggs had earned points before. EmbodiedEvo gave its agent notes about where contact occurred and which step had triggered success. [HexaShell-Preview](https://robodojo-benchmark.com/leaderboard/rollouts/HexaShell-preview?bench=sim) · [EmbodiedEvo](https://robodojo-benchmark.com/leaderboard/rollouts/EmbodiedEvo?bench=sim)
-- One Agent-as-Policy task asked the robot to sweep blocks into a dustpan. Its hint said the grader never checked whether the robot used the brush and suggested picking up the blocks instead. [Agent-as-Policy](https://robodojo-benchmark.com/leaderboard/rollouts/AGP?bench=sim)
+| Agent | What its scaffold hands the model |
+| --- | --- |
+| [Q0-Preview](https://robodojo-benchmark.com/leaderboard/rollouts/Q0_Preview?bench=sim) | The target coordinates, and the conditions under which points are awarded. |
+| [PyRUA-Lean](https://robodojo-benchmark.com/leaderboard/rollouts/PyRUA_Lean?bench=sim) | The same, plus a tolerance: the robot may return to its start pose within 15 cm and 20°. |
+| [SOLVE](https://robodojo-benchmark.com/leaderboard/rollouts/nvidia?bench=sim) | One guide per task, 34 of them, selected by task name: solving the task includes choosing the right document. |
+| [SenseNova-RoboRSI](https://robodojo-benchmark.com/leaderboard/rollouts/SenseNova-RoboRSI?bench=sim) | Reference images, notes and recorded trajectories, filed by task. |
+| [JoyAI-VL](https://robodojo-benchmark.com/leaderboard/rollouts/JoyAI-VL?bench=sim) | A button-pressing tool that already names the arm and the order of presses. |
+| [GO-3 Nano](https://robodojo-benchmark.com/leaderboard/rollouts/GO-3%20Nano%20Preview?bench=sim), [PhysicalRSI](https://robodojo-benchmark.com/leaderboard/rollouts/KAI?bench=sim) | Whole action programs, callable by task. |
+| [HexaShell-Preview](https://robodojo-benchmark.com/leaderboard/rollouts/HexaShell-preview?bench=sim) | Notes recording which placements of the eggs had scored before. |
+| [EmbodiedEvo](https://robodojo-benchmark.com/leaderboard/rollouts/EmbodiedEvo?bench=sim) | Notes on where contact happened and which step triggered a success. |
+| [Agent-as-Policy](https://robodojo-benchmark.com/leaderboard/rollouts/AGP?bench=sim) | A hint that the grader never checks whether the brush was used, so the blocks may simply be picked up. |
+
+Read as a group, they are the same finding as ours in a different position. Our model brought the
+answer with it; these scaffolds deliver the answer through the tool interface.
+
+## What this changes about a leaderboard
+
+Nothing about the robot. Everything about the number.
+
+A success rate reported with the task ID visible is not comparable to one reported without it, and the
+two are indistinguishable on a table. That is the whole problem: the difference is invisible in the
+output, present in the harness, and worth about twenty points in our runs.
+
+Neither fix is exciting. Report the condition, the way people now report the sampler and the decoding
+settings. Or do not send task identity to the model at all, and let the instruction carry the task.
+Both are cheap, and the second costs the agent nothing we could measure: in 19 of 24 pairs the
+identifiers changed nothing.
+
+<a id="reproduce-the-experiments"></a>
+<details>
+<summary><strong>Reproduce both experiments</strong></summary>
+
+Use Python 3.11 with NumPy, Matplotlib and FFmpeg on the path. From the repository root,
+`python3 runners/report.py` rebuilds the English figures from the published records; add `--zh` for the
+Chinese portrait versions with a Simplified Chinese font installed. `python3 runners/blog_data.py`
+rebuilds the post's question grid and `python3 runners/blog_figures.py` redraws the interface figure.
+
+For the question sessions, authenticate Codex CLI and run `python3 runners/query.py`. Both arms use the
+same template, which asks the model to verify answers if a search tool is available. Only the prompt and
+case metadata reach the agent. Score exact matches per field by hand against the pinned commit, and
+record approximate answers separately. [Template](experiments/query-prompt.txt) ·
+[Questions and keys](experiments/questions.json) ·
+[Answers and verdicts](results/queries.jsonl)
+
+For the manipulation runs, install the pinned GPT-GEAR and LIBERO-Plus checkouts, Wand/ImageMagick and
+the LIBERO-Plus assets. Set `GPT_GEAR_ROOT`, `LIBERO_PLUS_ROOT` and `SIM_PYTHON`. Run
+`sh runners/local_sim.sh --check-scenes` to verify the six starting states, then `sh runners/local_sim.sh`
+for the trials; `--task libero_goal/2365` runs the drawer subset. Each episode allows 200 model requests
+and 1,200 policy-controlled steps after 10 settling steps, at high reasoning effort, with seed 0 and
+initial-state index 0 in both arms. [Simulator setup](https://github.com/6UOOON9/GPT-GEAR/blob/77a538afd492b58486741776016578349939c024/docs/installation.md) ·
+[Runtime versions](experiments/runtime.json) ·
+[Assets](https://huggingface.co/datasets/Sylvest/LIBERO-plus/tree/dd2bd61b7d9a6fef1abc52d606e983b41886a149) ·
+[Scene and pair schedule](experiments/libero-plus.json) ·
+[Episode ledger](results/episodes.jsonl)
+
+To inspect a decision in the compressed trace, find its slot in the episode ledger. Its zero-based
+video frame is `first_frame + observation_id`; each frame holds the external view on the left and the
+wrist view on the right. [Actions and visible reasoning](results/robot-traces.jsonl.gz) ·
+[Lossless recordings](results/views)
+
+</details>
+
+## Citation
+
+```bibtex
+@misc{disproof2026answerkey,
+  title  = {Answer-Key Leakage: robot agents score higher when they
+            know which task they are on},
+  author = {Disproof AI Lab},
+  year   = {2026},
+  note   = {https://github.com/DisproofAILab/robot-reward-audit}
+}
+```
