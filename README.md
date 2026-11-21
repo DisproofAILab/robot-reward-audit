@@ -22,13 +22,13 @@ All three matched. The model also volunteered the default table dimensions, **0.
 
 ![Offline answers by case. Each filled square is an exact match to one of the three withheld details.](figures/query.png)
 
-**With search off, the agent got 12 of 36 details right, in 5 of 12 cases.** It got all three for stacking cubes, opening the robosuite door and starting the RoboCasa microwave. It got two for the LIBERO mug task and one for the RoboCasa drawer. The remaining seven cases yielded zero exact matches.
+**With no network access, the agent got 12 of 36 details right, in 5 of 12 cases.** It got all three for stacking cubes, opening the robosuite door and starting the RoboCasa microwave. It got two for the LIBERO mug task and one for the RoboCasa drawer. The remaining seven cases yielded zero exact matches.
 
 One question asked which distractor mug was present. That wording gave away the existence of a third mug. The agent supplied its unprompted internal name, **`red_coffee_mug_1`**. That suggests it knows the implementation. Other correct fields could also be inferred from the cues.
 
-**Same questions, search on.** We repeated each case verbatim in a fresh session with live search available. All 12 used it, and the score rose to **35/36**. [Answers, tool events and field scores](results/queries.jsonl)
+**Same questions, network access.** We repeated each case verbatim in a fresh session with live search available. All 12 used it, and the score rose to **35/36**. [Answers, tool events and field scores](results/queries.jsonl)
 
-![Live-search results in the same order as the offline grid. The only empty square is the first question in the LIBERO-PRO microwave object-swap case.](figures/query-search.png)
+![Results with network access, in the same order as the offline grid. The only empty square is the first question in the LIBERO-PRO microwave object-swap case.](figures/query-search.png)
 
 ## Experiment 2 · Could recognizing the benchmark help the robot pass?
 
