@@ -7,6 +7,7 @@ as the body text.
     python3 runners/blog_figures.py
 """
 from pathlib import Path
+import subprocess
 
 DOCS = Path(__file__).resolve().parents[1] / "docs"
 ASSETS = DOCS / "assets"
@@ -32,7 +33,30 @@ def code(rows, top):
     return body
 
 
-def interface():
+LABELS = {
+    "en": {
+        "hidden": "IDs hidden",
+        "hidden_sub": "The agent reads the instruction and the robot state.",
+        "shown": "IDs provided",
+        "shown_sub": "The same sentence, plus six fields the benchmark already knows.",
+        "alt": ("The same observation reply twice. With the identifiers hidden the agent reads the "
+                "instruction and the robot state. With them provided it also reads the benchmark, the "
+                "suite, a numeric task ID, the full task name, the seed and the initial-state index."),
+        "sans": SANS,
+    },
+    "zh": {
+        "hidden": "隐藏标识",
+        "hidden_sub": "Agent 只能读到指令和机械臂状态。",
+        "shown": "提供标识",
+        "shown_sub": "同一句话，外加六个 Benchmark 早就知道的字段。",
+        "alt": ("同一条 observe() 回复的两种形态。隐藏标识时，Agent 只能读到指令和机械臂状态；"
+                "提供标识时，它还会读到 Benchmark 名、任务集、题号、完整任务名、随机种子和初始状态编号。"),
+        "sans": "'PingFang SC','Noto Sans CJK SC','Source Han Sans SC'," + SANS,
+    },
+}
+
+
+def interface(lang="en"):
     hidden_rows = [
         ("{", None),
         ('  "observation_id": 0,', None),
@@ -77,26 +101,27 @@ def interface():
     second = code(shown_rows, second_box)
     mark_top = second_box + LEAD + 7 * STEP - 13
 
+    labels = LABELS[lang]
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 {total}" role="img"
-     aria-label="The same observation reply twice. With the identifiers hidden the agent reads the instruction and the robot state. With them provided it also reads the benchmark, the suite, a numeric task ID, the full task name, the seed and the initial-state index.">
+     aria-label="{labels['alt']}">
   <style>
     text {{ font-family: {MONO}; font-size: 13px; fill: #3a4a4d; white-space: pre; }}
     .k {{ fill: #086d67; }}
     .q {{ fill: #8a9a9c; }}
     .a {{ fill: #118659; }}
-    .t {{ font-family: {SANS}; font-size: 15px; font-weight: 600; fill: #172e33; }}
-    .s {{ font-family: {SANS}; font-size: 13px; fill: #74868a; }}
+    .t {{ font-family: {labels['sans']}; font-size: 15px; font-weight: 600; fill: #172e33; }}
+    .s {{ font-family: {labels['sans']}; font-size: 13px; fill: #74868a; }}
     .box {{ fill: #fcfcfb; stroke: #e4e8e5; }}
     .box-on {{ fill: #f6fbf8; stroke: #bcdcc8; }}
   </style>
 
-  <text class="t" x="0" y="{first_title}">IDs hidden</text>
-  <text class="s" x="0" y="{first_title + 18}">The agent reads the instruction and the robot state.</text>
+  <text class="t" x="0" y="{first_title}">{labels['hidden']}</text>
+  <text class="s" x="0" y="{first_title + 18}">{labels['hidden_sub']}</text>
   <rect class="box" x="0" y="{first_box}" width="760" height="{first_height}" rx="5"/>
 {chr(10).join('  ' + line for line in first)}
 
-  <text class="t" x="0" y="{second_title}">IDs provided</text>
-  <text class="s" x="0" y="{second_title + 18}">The same sentence, plus six fields the benchmark already knows.</text>
+  <text class="t" x="0" y="{second_title}">{labels['shown']}</text>
+  <text class="s" x="0" y="{second_title + 18}">{labels['shown_sub']}</text>
   <rect class="box-on" x="0" y="{second_box}" width="760" height="{second_height}" rx="5"/>
   <rect x="10" y="{mark_top}" width="3" height="{7 * STEP}" fill="#2e996a" rx="1"/>
 {chr(10).join('  ' + line for line in second)}
@@ -104,10 +129,21 @@ def interface():
 """
 
 
+def rasterise(name):
+    """A PNG for the README, which GitHub renders more predictably than an inline SVG."""
+    try:
+        subprocess.run(["rsvg-convert", "-w", "1520", str(ASSETS / name),
+                        "-o", str(ASSETS / name.replace(".svg", ".png"))], check=True)
+    except (OSError, subprocess.CalledProcessError):
+        print(f"{name}: no rsvg-convert, skipped the PNG")
+
+
 def main():
     ASSETS.mkdir(parents=True, exist_ok=True)
-    (ASSETS / "fig-interface.svg").write_text(interface())
-    print("fig-interface.svg written")
+    for lang, name in (("en", "fig-interface.svg"), ("zh", "fig-interface-zh.svg")):
+        (ASSETS / name).write_text(interface(lang))
+        rasterise(name)
+        print(f"{name} written")
 
 
 if __name__ == "__main__":
