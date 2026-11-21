@@ -1,0 +1,26 @@
+{
+  "backend": "GPT-GEAR",
+  "backend_commit": "77a538afd492b58486741776016578349939c024",
+  "simulator": "sylvestf/LIBERO-plus",
+  "simulator_commit": "4976dc30028e805ff8094b55501d532c48fec182",
+  "assets_revision": "dd2bd61b7d9a6fef1abc52d606e983b41886a149",
+  "assets_archive_sha256": "96764a4bfbdaea98d4411598caeab235458318fe0f549611b93d1a323027b3cf",
+  "system": "macOS 26.6",
+  "architecture": "arm64",
+  "python": "3.11.14",
+  "render_backend": "cgl",
+  "codex": "0.171.0-alpha.13",
+  "request_transport": "Codex app-server dynamic tools and HTTP Responses, loopback metering relay; no shell or MCP servers in agent workspace",
+  "packages": {
+    "numpy": "1.26.4",
+    "mujoco": "3.2.7",
+    "robosuite": "1.4.1",
+    "torch": "2.6.0",
+    "bddl": "1.0.1",
+    "Pillow": "13.0.0",
+    "Wand": "0.6.13"
+  },
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "backend_repository": "https://github.com/6UOOON9/GPT-GEAR"
+}

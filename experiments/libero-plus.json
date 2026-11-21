@@ -1,0 +1,134 @@
+{
+  "seed": 0,
+  "init_state_index": 0,
+  "policy_steps": 1200,
+  "settling_steps": 10,
+  "pair_tool_settings": [
+    "disabled",
+    "live",
+    "disabled",
+    "live"
+  ],
+  "tasks": [
+    {
+      "task": "libero_10/106",
+      "label": "Both moka pots on stove",
+      "instruction": "put both moka pots on the stove",
+      "post_reset_sha256": "1a32d118f8653a377fa2a2c0d80e59b48431ba11079f9d2d30baee971e4340b9",
+      "slots": {
+        "provided": [
+          "001",
+          "002",
+          "028",
+          "027"
+        ],
+        "hidden": [
+          "004",
+          "003",
+          "025",
+          "026"
+        ]
+      }
+    },
+    {
+      "task": "libero_goal/2365",
+      "label": "Bowl in top drawer",
+      "instruction": "open the top layer of the drawer and put the bowl inside",
+      "post_reset_sha256": "776fb97c125220300f2ff91533c9d0306a274d4970002b76cbd11b9bcdf8189c",
+      "slots": {
+        "provided": [
+          "007",
+          "005",
+          "030",
+          "032"
+        ],
+        "hidden": [
+          "006",
+          "008",
+          "031",
+          "029"
+        ]
+      }
+    },
+    {
+      "task": "libero_spatial/1753",
+      "label": "Specified bowl on plate",
+      "instruction": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+      "post_reset_sha256": "f232c8d4604efe6380923796f6150e54dbd3371f325ec4f810e9c01604d2aab2",
+      "slots": {
+        "provided": [
+          "012",
+          "011",
+          "033",
+          "034"
+        ],
+        "hidden": [
+          "009",
+          "010",
+          "036",
+          "035"
+        ]
+      }
+    },
+    {
+      "task": "libero_goal/1976",
+      "label": "Plate to stove front",
+      "instruction": "push the plate to the front of the stove",
+      "post_reset_sha256": "2352a0589f106b10cdbaf5a505a9a3ec9d81bdbc750e97513e519b06f3cd2f90",
+      "slots": {
+        "provided": [
+          "014",
+          "016",
+          "039",
+          "037"
+        ],
+        "hidden": [
+          "015",
+          "013",
+          "038",
+          "040"
+        ]
+      }
+    },
+    {
+      "task": "libero_10/2007",
+      "label": "Mug in, door closed",
+      "instruction": "put the yellow and white mug in the microwave and close it",
+      "post_reset_sha256": "fc06824004d2f107fb549bc6ce5033c135a02a6088552a97d19e095b9f150d42",
+      "slots": {
+        "provided": [
+          "017",
+          "018",
+          "044",
+          "043"
+        ],
+        "hidden": [
+          "020",
+          "019",
+          "041",
+          "042"
+        ]
+      }
+    },
+    {
+      "task": "libero_object/0",
+      "label": "Soup in basket",
+      "instruction": "pick the alphabet soup and place it in the basket",
+      "post_reset_sha256": "4c934241b9a4021da3cd23a7fb6fab0c71d5ceeeed9f2ed98523ca99ae13e806",
+      "slots": {
+        "provided": [
+          "023",
+          "021",
+          "046",
+          "048"
+        ],
+        "hidden": [
+          "022",
+          "024",
+          "047",
+          "045"
+        ]
+      }
+    }
+  ]
+}

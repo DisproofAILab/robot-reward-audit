@@ -1,0 +1,49 @@
+default_permissions = "experiment"
+approval_policy = "never"
+web_search = "disabled"
+project_root_markers = ["AGENTS.md"]
+# The runner delivers the prepared instructions through one audited file read.
+project_doc_max_bytes = 0
+
+[permissions.experiment.filesystem]
+":workspace_roots" = "read"
+
+[permissions.experiment.network]
+enabled = false
+
+[features]
+apps = false
+plugins = false
+remote_plugin = false
+memories = false
+hooks = false
+computer_use = false
+browser_use = false
+browser_use_external = false
+in_app_browser = false
+skill_search = false
+skip_host_skill_discovery = true
+multi_agent_v2 = false
+shell_tool = false
+unified_exec = false
+view_image = false
+image_generation = false
+tool_suggest = false
+
+[agents]
+enabled = false
+
+[skills]
+include_instructions = false
+
+[skills.bundled]
+enabled = false
+
+[apps._default]
+enabled = false
+
+[plugins._default]
+enabled = false
+
+[shell_environment_policy]
+inherit = "none"

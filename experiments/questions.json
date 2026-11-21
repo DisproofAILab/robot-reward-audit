@@ -1,0 +1,338 @@
+[
+  {
+    "id": "casa1",
+    "benchmark": "RoboCasa365",
+    "task": "OpenDrawer",
+    "metadata": {
+      "instruction": "Open the left drawer.",
+      "repository": "robocasa/robocasa",
+      "revision": "7bfc60c9d26c02506d4265cbe0e86b35e6e25d42",
+      "source_file": "robocasa/environments/kitchen/atomic/kitchen_drawer.py",
+      "questions": [
+        "所有抽屉关节的归一化开度须达到多少才成功？",
+        "抽屉内随机物体的最大高度？",
+        "柜台干扰物数量采样范围？"
+      ]
+    },
+    "key": [
+      "每个关节均 >=0.95",
+      "0.10 m",
+      "1–3 个（integers(1,4)）"
+    ],
+    "source": "https://github.com/robocasa/robocasa/blob/7bfc60c9d26c02506d4265cbe0e86b35e6e25d42/robocasa/environments/kitchen/atomic/kitchen_drawer.py",
+    "blob_sha1": "8d110d59941c73bc7885e747e07ba4b202db5042",
+    "questions_en": [
+      "How far must every normalized drawer joint open?",
+      "What is the maximum height of the object inside the drawer?",
+      "What range is sampled for the number of counter distractors?"
+    ]
+  },
+  {
+    "id": "casa2",
+    "benchmark": "RoboCasa365",
+    "task": "TurnOnMicrowave",
+    "metadata": {
+      "instruction": "Press the start button on the microwave.",
+      "repository": "robocasa/robocasa",
+      "revision": "7bfc60c9d26c02506d4265cbe0e86b35e6e25d42",
+      "source_file": "robocasa/environments/kitchen/atomic/kitchen_microwave.py",
+      "questions": [
+        "物体在微波炉中的 placement.size 两个维度是多少？",
+        "除了机器已开，成功还检查哪一项？",
+        "放置配置尝试把物体放入哪类对象？"
+      ]
+    },
+    "key": [
+      "(0.05,0.05) m",
+      "夹爪已离开 start_button",
+      "container 容器"
+    ],
+    "source": "https://github.com/robocasa/robocasa/blob/7bfc60c9d26c02506d4265cbe0e86b35e6e25d42/robocasa/environments/kitchen/atomic/kitchen_microwave.py",
+    "blob_sha1": "5c305df02b26fd44cdcff060420a6df0741891c5",
+    "questions_en": [
+      "What are the two placement dimensions for the object inside the microwave?",
+      "What else is checked after the appliance turns on?",
+      "What type of receptacle does placement try to use?"
+    ]
+  },
+  {
+    "id": "lib1",
+    "benchmark": "LIBERO",
+    "task": "libero_10/KITCHEN_SCENE8_put_both_moka_pots_on_the_stove",
+    "metadata": {
+      "instruction": "put both moka pots on the stove",
+      "repository": "Lifelong-Robot-Learning/LIBERO",
+      "revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+      "source_file": "libero/libero/bddl_files/libero_10/KITCHEN_SCENE8_put_both_moka_pots_on_the_stove.bddl",
+      "questions": [
+        "初态和终态分别是否要求炉子开启？",
+        "moka_pot_1 初始化在哪个命名区域？",
+        "该区域沿 x 的采样区间是多少？"
+      ]
+    },
+    "key": [
+      "初态和终态均包含 Turnon flat_stove_1",
+      "右侧 moka_pot_right_init_region",
+      "[-0.075,-0.025] m"
+    ],
+    "source": "https://github.com/Lifelong-Robot-Learning/LIBERO/blob/8f1084e3132a39270c3a13ebe37270a43ece2a01/libero/libero/bddl_files/libero_10/KITCHEN_SCENE8_put_both_moka_pots_on_the_stove.bddl",
+    "blob_sha1": "b983d7285869b49d3b6fe1329a9b7574de67b41b",
+    "questions_en": [
+      "Does the stove need to be on initially and at the goal?",
+      "Which named region starts the first moka pot?",
+      "What is that region’s x interval?"
+    ]
+  },
+  {
+    "id": "lib2",
+    "benchmark": "LIBERO",
+    "task": "libero_10/LIVING_ROOM_SCENE5_put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate",
+    "metadata": {
+      "instruction": "put the white mug on the left plate and put the yellow and white mug on the right plate",
+      "repository": "Lifelong-Robot-Learning/LIBERO",
+      "revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+      "source_file": "libero/libero/bddl_files/libero_10/LIVING_ROOM_SCENE5_put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate.bddl",
+      "questions": [
+        "题面之外的干扰杯是什么实例？",
+        "左盘初始化区域的 y 范围是多少？",
+        "哪个实例应放到 plate_2？请给出实例标识。"
+      ]
+    },
+    "key": [
+      "red_coffee_mug_1",
+      "[-0.325,-0.275] m",
+      "white_yellow_mug_1"
+    ],
+    "source": "https://github.com/Lifelong-Robot-Learning/LIBERO/blob/8f1084e3132a39270c3a13ebe37270a43ece2a01/libero/libero/bddl_files/libero_10/LIVING_ROOM_SCENE5_put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate.bddl",
+    "blob_sha1": "32024734f78b9c469d45c9d50503c2099ad67c4d",
+    "questions_en": [
+      "Which distractor mug instance is absent from the instruction?",
+      "What is the left plate region’s y interval?",
+      "Which mug instance belongs on plate 2?"
+    ]
+  },
+  {
+    "id": "pro1",
+    "benchmark": "LIBERO-PRO",
+    "task": "libero_10_object/KITCHEN_SCENE6_put_the_yellow_and_white_mug_in_the_microwave_and_close_it",
+    "metadata": {
+      "instruction": "put the yellow and white mug in the microwave and close it",
+      "repository": "Hugging Face datasets: zhouxueyang/LIBERO-Pro",
+      "revision": "c86fc3b8293185a6f373677018ff3e37f8391602",
+      "source_file": "bddl_files/libero_10_object/KITCHEN_SCENE6_put_the_yellow_and_white_mug_in_the_microwave_and_close_it.bddl",
+      "questions": [
+        "在 object 变体中，goal 实际指定哪只杯子？给实例标识。",
+        "微波炉在初始状态中是开门还是关门？",
+        "goal 指定的杯子其初始化区域的 x 范围是多少？"
+      ]
+    },
+    "key": [
+      "red_coffee_mug_1",
+      "Open microwave_1",
+      "[-0.025,0.025] m"
+    ],
+    "source": "https://huggingface.co/datasets/zhouxueyang/LIBERO-Pro/blob/c86fc3b8293185a6f373677018ff3e37f8391602/bddl_files/libero_10_object/KITCHEN_SCENE6_put_the_yellow_and_white_mug_in_the_microwave_and_close_it.bddl",
+    "blob_sha1": "cc4f734e633973e1a9805acef2dcd104a28f61ca",
+    "questions_en": [
+      "Which exact mug does the object variant’s goal name?",
+      "Is the microwave door initially open or closed?",
+      "What is the x interval for the goal mug’s starting region?"
+    ]
+  },
+  {
+    "id": "pro2",
+    "benchmark": "LIBERO-PRO",
+    "task": "libero_10_swap/LIVING_ROOM_SCENE1_put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket",
+    "metadata": {
+      "instruction": "put both the alphabet soup and the cream cheese box in the basket",
+      "repository": "Hugging Face datasets: zhouxueyang/LIBERO-Pro",
+      "revision": "c86fc3b8293185a6f373677018ff3e37f8391602",
+      "source_file": "bddl_files/libero_10_swap/LIVING_ROOM_SCENE1_put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket.bddl",
+      "questions": [
+        "在 swap 变体中，alphabet_soup_1 被初始化到哪个物体的命名区域？",
+        "cream_cheese_1 被初始化到哪个物体的命名区域？",
+        "篮子初始区域的 y 范围是多少？"
+      ]
+    },
+    "key": [
+      "ketchup_init_region",
+      "tomato_sauce_init_region",
+      "[0.25,0.27] m"
+    ],
+    "source": "https://huggingface.co/datasets/zhouxueyang/LIBERO-Pro/blob/c86fc3b8293185a6f373677018ff3e37f8391602/bddl_files/libero_10_swap/LIVING_ROOM_SCENE1_put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket.bddl",
+    "blob_sha1": "54ded8e93655c080a51efa397572e51fec955691",
+    "questions_en": [
+      "Which object’s named region starts the alphabet soup?",
+      "Which one starts the cream cheese?",
+      "What is the basket region’s y interval?"
+    ]
+  },
+  {
+    "id": "plus1",
+    "benchmark": "LIBERO-Plus",
+    "task": "libero_10/KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it_add_1",
+    "metadata": {
+      "instruction": "turn on the stove and put the moka pot on it",
+      "repository": "sylvestf/LIBERO-plus",
+      "revision": "4976dc30028e805ff8094b55501d532c48fec182",
+      "source_file": "libero/libero/bddl_files/libero_10/KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it_add_1.bddl",
+      "questions": [
+        "add_1 变体新增的干扰物是什么？",
+        "新增干扰物初始化区域的中心 xy 是多少？",
+        "新增物体的初始 yaw 区间？"
+      ]
+    },
+    "key": [
+      "bag_of_yeast_1 酵母袋",
+      "(0.20,0.15) m",
+      "[0,0] rad"
+    ],
+    "source": "https://github.com/sylvestf/LIBERO-plus/blob/4976dc30028e805ff8094b55501d532c48fec182/libero/libero/bddl_files/libero_10/KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it_add_1.bddl",
+    "blob_sha1": "f5d56d18b5a23c0f7fe444f3114cc0aa28690619",
+    "questions_en": [
+      "Which distractor does the add_1 variant introduce?",
+      "What is the xy center of its starting region?",
+      "What is its initial yaw interval?"
+    ]
+  },
+  {
+    "id": "plus2",
+    "benchmark": "LIBERO-Plus",
+    "task": "libero_10/KITCHEN_SCENE4_put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it_level2_sample1",
+    "metadata": {
+      "instruction": "put the black bowl in the bottom drawer of the cabinet and close it",
+      "repository": "sylvestf/LIBERO-plus",
+      "revision": "4976dc30028e805ff8094b55501d532c48fec182",
+      "source_file": "libero/libero/bddl_files/libero_10/KITCHEN_SCENE4_put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it_level2_sample1.bddl",
+      "questions": [
+        "level2_sample1 中黑碗初始区域的中心 xy 是多少？精确至 0.001 m。",
+        "酒架初始 yaw 的固定值？",
+        "底层抽屉初始状态是什么？"
+      ]
+    },
+    "key": [
+      "(0.034,-0.054) m，接受原值 (0.03416746,-0.05421570)",
+      "π rad / 180°",
+      "Open white_cabinet_1_bottom_region"
+    ],
+    "source": "https://github.com/sylvestf/LIBERO-plus/blob/4976dc30028e805ff8094b55501d532c48fec182/libero/libero/bddl_files/libero_10/KITCHEN_SCENE4_put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it_level2_sample1.bddl",
+    "blob_sha1": "55b7684f7f9b4c130febdb6e00f13d998bead31d",
+    "questions_en": [
+      "What is the black bowl region’s xy center to 0.001 m?",
+      "What is the fixed initial yaw of the wine rack?",
+      "What is the bottom drawer’s initial state?"
+    ]
+  },
+  {
+    "id": "twin1",
+    "benchmark": "RoboTwin 2.0",
+    "task": "beat_block_hammer",
+    "metadata": {
+      "instruction": "there is a hammer and a block on the table, use the arm to <grab the hammer> and <beat the block>",
+      "repository": "RoboTwin-Platform/RoboTwin",
+      "revision": "ea8b21121ebb3cd201ff5b3fe361944ac94eda3f",
+      "source_file": "envs/beat_block_hammer.py",
+      "questions": [
+        "立方块 half_size 的三个分量？",
+        "成功判定对 xy 两轴的容差各是多少？",
+        "空间容差之外还检查什么？"
+      ]
+    },
+    "key": [
+      "(0.025,0.025,0.025) m",
+      "各 <0.02 m",
+      "锤子与立方块两 actor 发生接触"
+    ],
+    "source": "https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/beat_block_hammer.py",
+    "blob_sha1": "d3b696cc0533acf400645ee0853677f6c08af0aa",
+    "questions_en": [
+      "What are the cube’s three half-extents?",
+      "What are the x and y success tolerances?",
+      "Which condition is checked in addition to those tolerances?"
+    ]
+  },
+  {
+    "id": "twin2",
+    "benchmark": "RoboTwin 2.0",
+    "task": "open_laptop",
+    "metadata": {
+      "instruction": "use one arm to open the laptop",
+      "repository": "RoboTwin-Platform/RoboTwin",
+      "revision": "ea8b21121ebb3cd201ff5b3fe361944ac94eda3f",
+      "source_file": "envs/open_laptop.py",
+      "questions": [
+        "初始关节位置占可动区间的比例？",
+        "check_success 默认参数对应的最低开度比例？",
+        "末端与目标接触点的成功距离门槛？"
+      ]
+    },
+    "key": [
+      "0.2",
+      "0.4",
+      "严格小于 0.1 m"
+    ],
+    "source": "https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/open_laptop.py",
+    "blob_sha1": "a67a859848580c8dc17918c0dec30e8cadcd57a5",
+    "questions_en": [
+      "At what fraction of its movable range does the joint start?",
+      "What minimum opening fraction does the default success check require?",
+      "What distance threshold applies between the end effector and the target contact point?"
+    ]
+  },
+  {
+    "id": "suite1",
+    "benchmark": "robosuite",
+    "task": "Stack",
+    "metadata": {
+      "instruction": "This class corresponds to the stacking task for a single robot arm.",
+      "repository": "ARISE-Initiative/robosuite",
+      "revision": "5ce6643f3092639d08f7b0f90ed1c6a84f50552c",
+      "source_file": "robosuite/environments/manipulation/stack.py",
+      "questions": [
+        "在 staged_rewards 中，cubeA 被认为已抬起的离桌高度阈值？",
+        "成功叠放时 r_stack 的未缩放值？",
+        "cubeA、cubeB 的三轴几何半尺寸分别是多少？"
+      ]
+    },
+    "key": [
+      ">0.04 m",
+      "2.0",
+      "各轴 A=0.020 m，B=0.025 m"
+    ],
+    "source": "https://github.com/ARISE-Initiative/robosuite/blob/5ce6643f3092639d08f7b0f90ed1c6a84f50552c/robosuite/environments/manipulation/stack.py",
+    "blob_sha1": "96a7276d1d2b11eaab60df99adb9feb1cd3e5f72",
+    "questions_en": [
+      "At what height above the table does the staged reward count cube A as lifted?",
+      "What is the unscaled stacking reward at success?",
+      "What are each cube’s three geometric half-extents?"
+    ]
+  },
+  {
+    "id": "suite2",
+    "benchmark": "robosuite",
+    "task": "Door",
+    "metadata": {
+      "instruction": "This class corresponds to the door opening task for a single robot arm.",
+      "repository": "ARISE-Initiative/robosuite",
+      "revision": "5ce6643f3092639d08f7b0f90ed1c6a84f50552c",
+      "source_file": "robosuite/environments/manipulation/door.py",
+      "questions": [
+        "成功的门铰链 qpos 阈值？",
+        "构造器 use_latch 默认值？",
+        "构造器默认 horizon 是多少控制步？"
+      ]
+    },
+    "key": [
+      ">0.3 rad",
+      "True",
+      "1000 步"
+    ],
+    "source": "https://github.com/ARISE-Initiative/robosuite/blob/5ce6643f3092639d08f7b0f90ed1c6a84f50552c/robosuite/environments/manipulation/door.py",
+    "blob_sha1": "5ddb61ca6946caf2cd7ade6e94d0f72e13d07203",
+    "questions_en": [
+      "What hinge position threshold signifies success?",
+      "What is the constructor default for use_latch?",
+      "What is its default horizon in control steps?"
+    ]
+  }
+]
